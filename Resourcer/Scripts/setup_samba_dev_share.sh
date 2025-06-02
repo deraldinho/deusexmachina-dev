@@ -56,7 +56,6 @@ else
     echo "✅ Samba instalado."
 fi
 
-<<<<<<< HEAD
 # 3. Criar o diretório ${PROJECTS_FULL_PATH} (/home/vagrant/Projetos) se não existir.
 # A pasta /home/vagrant já deve existir e ser propriedade de vagrant:vagrant.
 # Apenas garantimos a criação da subpasta Projetos.
@@ -68,7 +67,6 @@ sudo -u "${SAMBA_USER}" mkdir -p "${PROJECTS_FULL_PATH}"
 sudo chown "${SAMBA_USER}:${SAMBA_GROUP}" "${PROJECTS_FULL_PATH}"
 sudo chmod 0775 "${PROJECTS_FULL_PATH}"
 echo "✅ Diretório ${PROJECTS_FULL_PATH} criado/verificado em ${VM_INTERNAL_BASE_DIR}."
-=======
 # 3. Criar o diretório base ${VM_INTERNAL_BASE_DIR} e a subpasta ${PROJECTS_SUBDIR}
 # Estes diretórios serão criados DENTRO da VM e não são sincronizados.
 echo "📁 Criando o diretório ${VM_INTERNAL_BASE_DIR} e ${PROJECTS_FULL_PATH} (se não existirem)..."
@@ -76,7 +74,6 @@ sudo mkdir -p "${PROJECTS_FULL_PATH}" # Cria o caminho completo
 sudo chown -R "${SAMBA_USER}:${SAMBA_GROUP}" "${VM_INTERNAL_BASE_DIR}" # Define o dono para todo o diretório base
 sudo chmod -R 0775 "${VM_INTERNAL_BASE_DIR}" # Permissões para o dono e grupo, leitura para outros
 echo "✅ Diretório ${PROJECTS_FULL_PATH} criado/configurado em ${VM_INTERNAL_BASE_DIR}."
->>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
 
 # 4. Configurar o Samba (smb.conf)
 echo "⚙️  Configurando o compartilhamento Samba em ${SMB_CONF}..."

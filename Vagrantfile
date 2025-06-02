@@ -144,15 +144,12 @@ Vagrant.configure("2") do |config|
   end
 
   # 4. Pastas Sincronizadas
-<<<<<<< HEAD
   # DESABILITA a sincronização padrão da pasta atual (onde está o Vagrantfile) para /vagrant na VM
   #config.vm.synced_folder ".", "/vagrant", disabled: true
   puts "#{USE_EMOJIS ? '🚫' : '[INFO]'} Sincronização padrão de '.' para '/vagrant' DESABILITADA."
-=======
   # A sincronização padrão de "." para "/vagrant" está ativa por padrão.
   # Se você quiser desabilitá-la completamente (conforme discutido para o Samba VM-Interno):
   # config.vm.synced_folder ".", "/vagrant", disabled: true
->>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
   # Por enquanto, para o chmod funcionar, vamos assumir que está ativa.
   # Se for desabilitada, a linha de chmod abaixo precisará ser removida ou repensada.
 
