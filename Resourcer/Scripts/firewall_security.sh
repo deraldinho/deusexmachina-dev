@@ -6,6 +6,7 @@ set -euo pipefail
 echo "---------------------------------------------------------------------"
 echo "🛡️  Iniciando a configuração do Firewall (UFW) e Fail2Ban..."
 echo "---------------------------------------------------------------------"
+<<<<<<< HEAD
 
 # Variável para a porta SSH. Pode ser sobrescrita por uma variável de ambiente se definida.
 SSH_PORT=${SSH_PORT:-22}
@@ -14,6 +15,16 @@ SSH_PORT=${SSH_PORT:-22}
 echo "🔄 Atualizando lista de pacotes do APT (pode ser rápido se já atualizado)..."
 sudo apt-get update -y -qq
 
+=======
+
+# Variável para a porta SSH. Pode ser sobrescrita por uma variável de ambiente se definida.
+SSH_PORT=${SSH_PORT:-22}
+
+# 1. Atualizar lista de pacotes (se não foi feito recentemente por outro script)
+echo "🔄 Atualizando lista de pacotes do APT (pode ser rápido se já atualizado)..."
+sudo apt-get update -y
+
+>>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
 # 2. Instalar UFW e Fail2Ban
 echo "🛠️  Instalando UFW e Fail2Ban..."
 if dpkg -s ufw &> /dev/null && dpkg -s fail2ban &> /dev/null; then
@@ -32,6 +43,7 @@ echo "🔥 Configurando regras do UFW..."
 # echo "   ⚠️  Resetando todas as regras do UFW existentes..."
 # sudo ufw --force reset # O --force é para evitar prompts
 
+<<<<<<< HEAD
 # Definir políticas padrão: negar tudo que entra, permitir tudo que sai.
 # A política FORWARD é geralmente DROP por padrão em /etc/default/ufw.
 echo "   Definindo políticas padrão do UFW: deny incoming, allow outgoing."
@@ -40,6 +52,13 @@ sudo ufw default allow outgoing
 # A linha 'sudo ufw default deny forwarded' foi removida pois é uma sintaxe inválida.
 # Para controlar o tráfego encaminhado, edite /etc/default/ufw e defina DEFAULT_FORWARD_POLICY="DROP" (ou ACCEPT/REJECT)
 # e depois use 'sudo ufw reload'. A política padrão já costuma ser segura (DROP).
+=======
+# Definir políticas padrão: negar tudo que entra, permitir tudo que sai, negar encaminhamento.
+echo "   Definindo políticas padrão do UFW: deny incoming, allow outgoing, deny forwarded."
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw default deny forwarded
+>>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
 
 # Permitir tráfego na interface de loopback (essencial para muitos serviços locais)
 echo "   Permitindo tráfego na interface de loopback (lo)."
@@ -85,6 +104,7 @@ if [[ ! " ${API_PORTS[@]} " =~ " 19999 " ]]; then
     sudo ufw allow 19999/tcp
 fi
 
+<<<<<<< HEAD
 
 # Habilitar UFW
 if sudo ufw status | grep -q "Status: active"; then
@@ -100,6 +120,22 @@ sudo ufw status verbose
 # 4. Configurar Fail2Ban
 echo "🛡️  Configurando Fail2Ban..."
 
+=======
+# Habilitar UFW
+if sudo ufw status | grep -q "Status: active"; then
+    echo "   UFW já está ativo. Recarregando regras para aplicar quaisquer alterações..."
+    sudo ufw reload
+else
+    echo "   Habilitando UFW (pode desconectar brevemente se estiver via SSH e a regra não estiver correta)..."
+    sudo ufw --force enable # O --force evita o prompt de confirmação.
+fi
+echo "   Status atual do UFW:"
+sudo ufw status verbose
+
+# 4. Configurar Fail2Ban
+echo "🛡️  Configurando Fail2Ban..."
+
+>>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
 # Criar um arquivo jail.local com configurações personalizadas para SSH.
 # É uma prática recomendada não editar o jail.conf diretamente.
 JAIL_LOCAL_FILE="/etc/fail2ban/jail.local"
@@ -127,16 +163,22 @@ port = ${SSH_PORT}
 # Para aumentar o rigor para SSH:
 maxretry = 3
 bantime = 2h
+<<<<<<< HEAD
 # Se quiser usar o UFW para banir (recomendado):
 # action = ufw[name=SSH, port=${SSH_PORT}, protocol=tcp]
 # Se a sua versão do fail2ban for mais antiga, pode ser:
 # action = ufw
+=======
+# Se quiser usar o UFW para banir:
+# action = ufw[name=sshd, port=${SSH_PORT}, protocol=tcp]
+>>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
 EOF
     echo "   Configuração básica para SSH criada em ${JAIL_LOCAL_FILE}."
 fi
 
 # Habilitar e reiniciar o serviço Fail2Ban
 echo "🔄 Habilitando e reiniciando o serviço Fail2Ban para aplicar as configurações..."
+<<<<<<< HEAD
 # É importante que o fail2ban seja reiniciado APÓS o ufw estar ativo e configurado.
 if sudo systemctl is-enabled --quiet fail2ban.service; then
     echo "   Serviço Fail2Ban já estava habilitado."
@@ -147,6 +189,10 @@ fi
 sudo systemctl restart fail2ban.service
 echo "   Serviço Fail2Ban reiniciado."
 
+=======
+sudo systemctl enable fail2ban.service
+sudo systemctl restart fail2ban.service
+>>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
 
 # Comandos úteis para verificar o status (descomente para debug manual):
 # echo "   Status do serviço Fail2Ban:"
@@ -156,4 +202,8 @@ echo "   Serviço Fail2Ban reiniciado."
 
 echo "---------------------------------------------------------------------"
 echo "✅ Firewall (UFW) e Fail2Ban configurados."
+<<<<<<< HEAD
 echo "---------------------------------------------------------------------"
+=======
+echo "---------------------------------------------------------------------"
+>>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
