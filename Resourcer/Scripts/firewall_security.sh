@@ -12,7 +12,7 @@ SSH_PORT=${SSH_PORT:-22}
 
 # 1. Atualizar lista de pacotes (se não foi feito recentemente por outro script)
 echo "🔄 Atualizando lista de pacotes do APT (pode ser rápido se já atualizado)..."
-sudo apt-get update -y
+sudo apt-get update -y -qq
 
 # 2. Instalar UFW e Fail2Ban
 echo "🛠️  Instalando UFW e Fail2Ban..."
@@ -32,11 +32,14 @@ echo "🔥 Configurando regras do UFW..."
 # echo "   ⚠️  Resetando todas as regras do UFW existentes..."
 # sudo ufw --force reset # O --force é para evitar prompts
 
-# Definir políticas padrão: negar tudo que entra, permitir tudo que sai, negar encaminhamento.
-echo "   Definindo políticas padrão do UFW: deny incoming, allow outgoing, deny forwarded."
+# Definir políticas padrão: negar tudo que entra, permitir tudo que sai.
+# A política FORWARD é geralmente DROP por padrão em /etc/default/ufw.
+echo "   Definindo políticas padrão do UFW: deny incoming, allow outgoing."
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
-sudo ufw default deny forwarded
+# A linha 'sudo ufw default deny forwarded' foi removida pois é uma sintaxe inválida.
+# Para controlar o tráfego encaminhado, edite /etc/default/ufw e defina DEFAULT_FORWARD_POLICY="DROP" (ou ACCEPT/REJECT)
+# e depois use 'sudo ufw reload'. A política padrão já costuma ser segura (DROP).
 
 # Permitir tráfego na interface de loopback (essencial para muitos serviços locais)
 echo "   Permitindo tráfego na interface de loopback (lo)."
@@ -76,6 +79,12 @@ sudo ufw allow 47808/udp   # BACnet
 sudo ufw allow 9000/tcp    # Exemplo: Node-RED (se exposto diretamente pela VM)
 sudo ufw allow 4222/tcp    # NATS
 sudo ufw allow 61616/tcp   # ActiveMQ
+# Adicionada porta do Netdata, se não estiver coberta pelas API_PORTS
+if [[ ! " ${API_PORTS[@]} " =~ " 19999 " ]]; then
+    echo "   Liberando porta para Netdata (19999/tcp)."
+    sudo ufw allow 19999/tcp
+fi
+
 
 # Habilitar UFW
 if sudo ufw status | grep -q "Status: active"; then
@@ -118,16 +127,26 @@ port = ${SSH_PORT}
 # Para aumentar o rigor para SSH:
 maxretry = 3
 bantime = 2h
-# Se quiser usar o UFW para banir:
-# action = ufw[name=sshd, port=${SSH_PORT}, protocol=tcp]
+# Se quiser usar o UFW para banir (recomendado):
+# action = ufw[name=SSH, port=${SSH_PORT}, protocol=tcp]
+# Se a sua versão do fail2ban for mais antiga, pode ser:
+# action = ufw
 EOF
     echo "   Configuração básica para SSH criada em ${JAIL_LOCAL_FILE}."
 fi
 
 # Habilitar e reiniciar o serviço Fail2Ban
 echo "🔄 Habilitando e reiniciando o serviço Fail2Ban para aplicar as configurações..."
-sudo systemctl enable fail2ban.service
+# É importante que o fail2ban seja reiniciado APÓS o ufw estar ativo e configurado.
+if sudo systemctl is-enabled --quiet fail2ban.service; then
+    echo "   Serviço Fail2Ban já estava habilitado."
+else
+    sudo systemctl enable fail2ban.service
+    echo "   Serviço Fail2Ban habilitado."
+fi
 sudo systemctl restart fail2ban.service
+echo "   Serviço Fail2Ban reiniciado."
+
 
 # Comandos úteis para verificar o status (descomente para debug manual):
 # echo "   Status do serviço Fail2Ban:"
