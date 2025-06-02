@@ -74,13 +74,13 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  #iot_tools.sh
   # Provisioning scripts
   scripts_path = ".\\Resourcer\\Scripts"
   provision_scripts = %w[
     time_locale.sh
     essentials.sh
     node_python.sh
-    iot_tools.sh
     docker_watchdog.sh
     firewall_security.sh
     monitoring_tools.sh
