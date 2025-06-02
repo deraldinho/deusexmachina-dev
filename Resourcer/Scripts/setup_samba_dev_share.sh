@@ -4,25 +4,15 @@
 set -euo pipefail
 
 # --- Variáveis de Configuração ---
-<<<<<<< HEAD
-# Diretório na VM que será criado e compartilhado (NÃO sincronizado com o host)
-# Esta é a pasta home do usuário vagrant, onde geralmente se cai ao fazer 'vagrant ssh'
-VM_INTERNAL_BASE_DIR="/home/vagrant"
-=======
 # Diretório base na VM que será criado e compartilhado (NÃO sincronizado com o host)
 VM_INTERNAL_BASE_DIR="/vagrant"
->>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
 # Subdiretório para os projetos de IA dentro do diretório base
 PROJECTS_SUBDIR="Projetos"
 # Caminho completo na VM para a pasta de projetos
 PROJECTS_FULL_PATH="${VM_INTERNAL_BASE_DIR}/${PROJECTS_SUBDIR}"
 
 # Nome do compartilhamento Samba que aparecerá na rede
-<<<<<<< HEAD
-SAMBA_SHARE_NAME="DeusExMachina" # Nome para o compartilhamento de /home/vagrant
-=======
 SAMBA_SHARE_NAME="DeusExMachina_VM_Workspace" # Nome para o compartilhamento de /vagrant
->>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
 # Usuário do sistema que terá acesso ao compartilhamento Samba
 SAMBA_USER="vagrant"
 # Grupo do sistema para o diretório compartilhado
@@ -41,11 +31,7 @@ echo "---------------------------------------------------------------------"
 
 # 1. Atualizar lista de pacotes
 echo "🔄 Atualizando lista de pacotes do APT..."
-<<<<<<< HEAD
-sudo apt-get update -y -qq
-=======
 sudo apt-get update -y
->>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
 
 # 2. Instalar Samba e suas dependências
 echo "🛠️  Instalando Samba e dependências..."
@@ -56,17 +42,6 @@ else
     echo "✅ Samba instalado."
 fi
 
-# 3. Criar o diretório ${PROJECTS_FULL_PATH} (/home/vagrant/Projetos) se não existir.
-# A pasta /home/vagrant já deve existir e ser propriedade de vagrant:vagrant.
-# Apenas garantimos a criação da subpasta Projetos.
-echo "📁 Criando o diretório ${PROJECTS_FULL_PATH} (se não existir)..."
-# O 'sudo -u' garante que a pasta seja criada com o usuário vagrant como dono,
-# o que já deve ser o caso para /home/vagrant, mas é uma boa prática para subpastas.
-sudo -u "${SAMBA_USER}" mkdir -p "${PROJECTS_FULL_PATH}"
-# Garantir permissões adequadas para a pasta de projetos
-sudo chown "${SAMBA_USER}:${SAMBA_GROUP}" "${PROJECTS_FULL_PATH}"
-sudo chmod 0775 "${PROJECTS_FULL_PATH}"
-echo "✅ Diretório ${PROJECTS_FULL_PATH} criado/verificado em ${VM_INTERNAL_BASE_DIR}."
 # 3. Criar o diretório base ${VM_INTERNAL_BASE_DIR} e a subpasta ${PROJECTS_SUBDIR}
 # Estes diretórios serão criados DENTRO da VM e não são sincronizados.
 echo "📁 Criando o diretório ${VM_INTERNAL_BASE_DIR} e ${PROJECTS_FULL_PATH} (se não existirem)..."
@@ -88,11 +63,7 @@ if grep -q "\[${SAMBA_SHARE_NAME}\]" "${SMB_CONF}"; then
     echo "   Verifique se está correta ou remova-a manualmente para reconfigurar."
 else
     echo "   Adicionando configuração para [${SAMBA_SHARE_NAME}]..."
-<<<<<<< HEAD
-    # Compartilhando o diretório VM_INTERNAL_BASE_DIR (/home/vagrant)
-=======
     # Compartilhando o diretório VM_INTERNAL_BASE_DIR (/vagrant)
->>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
     sudo bash -c "cat >> ${SMB_CONF}" << EOF
 
 [${SAMBA_SHARE_NAME}]
@@ -102,17 +73,9 @@ else
    writable = yes
    guest ok = no
    read only = no
-<<<<<<< HEAD
-   create mask = 0664  # Arquivos criados terão permissão rw-rw-r--
-   directory mask = 0775 # Pastas criadas terão permissão rwxrwxr-x
-   valid users = ${SAMBA_USER}
-   # Forçar o usuário e grupo garante que os arquivos criados via Samba
-   # pertençam ao usuário 'vagrant' dentro da VM.
-=======
    create mask = 0664
    directory mask = 0775
    valid users = ${SAMBA_USER}
->>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
    force user = ${SAMBA_USER}
    force group = ${SAMBA_GROUP}
 EOF
@@ -126,10 +89,6 @@ sudo testparm -s
 echo "👤 Configurando o usuário '${SAMBA_USER}' para o Samba..."
 echo "   ‼️  IMPORTANTE: A senha para o usuário Samba '${SAMBA_USER}' precisa ser definida."
 echo "   Execute na VM (via 'vagrant ssh'): sudo smbpasswd -a ${SAMBA_USER}"
-<<<<<<< HEAD
-# Habilita o usuário no Samba (não define a senha, apenas garante que ele pode ser usado se já tiver uma)
-=======
->>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
 sudo smbpasswd -e "${SAMBA_USER}" &> /dev/null || true
 
 # 6. Reiniciar serviços Samba
@@ -168,7 +127,4 @@ echo "   3. Use o usuário '${SAMBA_USER}' e a senha Samba definida."
 echo "   4. Dentro do compartilhamento '${SAMBA_SHARE_NAME}', você encontrará a pasta '${PROJECTS_SUBDIR}'."
 echo "      Todo o conteúdo desta pasta reside EXCLUSIVAMENTE na VM."
 echo "---------------------------------------------------------------------"
-<<<<<<< HEAD
-=======
 # Fim do script de configuração do Samba para compartilhamento de /vagrant
->>>>>>> 9e9142979893d053db9985839d2f8ca44d82800b
