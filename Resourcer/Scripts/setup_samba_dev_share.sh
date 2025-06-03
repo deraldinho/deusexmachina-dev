@@ -5,14 +5,14 @@ set -euo pipefail
 
 # --- Variáveis de Configuração ---
 # Diretório base na VM que será criado e compartilhado (NÃO sincronizado com o host)
-VM_INTERNAL_BASE_DIR="/vagrant"
+VM_INTERNAL_BASE_DIR="/home/vagrant"
 # Subdiretório para os projetos de IA dentro do diretório base
 PROJECTS_SUBDIR="Projetos"
 # Caminho completo na VM para a pasta de projetos
 PROJECTS_FULL_PATH="${VM_INTERNAL_BASE_DIR}/${PROJECTS_SUBDIR}"
 
 # Nome do compartilhamento Samba que aparecerá na rede
-SAMBA_SHARE_NAME="DeusExMachina_VM_Workspace" # Nome para o compartilhamento de /vagrant
+SAMBA_SHARE_NAME="DeusExMachina" # Nome para o compartilhamento de /vagrant
 # Usuário do sistema que terá acesso ao compartilhamento Samba
 SAMBA_USER="vagrant"
 # Grupo do sistema para o diretório compartilhado
