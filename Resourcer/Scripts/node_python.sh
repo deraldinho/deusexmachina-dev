@@ -17,11 +17,11 @@ NODE_MAJOR_VERSION="18" # Você pode mudar para "20", "22", etc., conforme neces
 
 # 1. Atualizar lista de pacotes (se não foi feito recentemente por outro script)
 echo "🔄 Atualizando lista de pacotes do APT (pode ser rápido se já atualizado)..."
-sudo apt-get update -y -qq
+sudo apt-get update -y 
 
 # 2. Garantir dependências para adicionar repositórios (já devem estar no essentials.sh, mas bom garantir)
 echo "🛠️  Garantindo dependências para repositórios (curl, gnupg, ca-certificates)..."
-sudo apt-get install -y -qq curl gnupg ca-certificates
+sudo apt-get install -y curl gnupg ca-certificates
 
 # 3. Instalar Node.js
 echo "NODEJS: Instalando Node.js v${NODE_MAJOR_VERSION}.x..."
@@ -54,10 +54,10 @@ else
     echo "deb-src [signed-by=${NODE_KEYRING_FILE}] https://deb.nodesource.com/node_${NODE_MAJOR_VERSION}.x $(lsb_release -cs) main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
 
     echo "   Atualizando lista de pacotes após adicionar repo NodeSource..."
-    sudo apt-get update -y -qq
+    sudo apt-get update -y 
     
     echo "   Instalando Node.js..."
-    sudo apt-get install -y -qq nodejs
+    sudo apt-get install -y nodejs
     
     echo "✅ Node.js instalado com sucesso."
     echo "   Versão do Node.js: $(node -v)"
@@ -78,7 +78,7 @@ if command_exists python3 && python3 --version &> /dev/null; then
     echo "✅ Python 3 já está instalado. Versão: $(python3 --version 2>&1)"
     PYTHON_INSTALLED=true
 else
-    sudo apt-get install -y -qq python3
+    sudo apt-get install -y python3
     echo "✅ Python 3 instalado. Versão: $(python3 --version 2>&1)"
     PYTHON_INSTALLED=true
 fi
@@ -88,7 +88,7 @@ if command_exists pip3 && pip3 --version &> /dev/null; then
     PIP_INSTALLED=true
 else
     if [ "$PYTHON_INSTALLED" = true ]; then
-        sudo apt-get install -y -qq python3-pip
+        sudo apt-get install -y python3-pip
         echo "✅ pip3 instalado. Versão: $(pip3 --version 2>&1)"
         PIP_INSTALLED=true
     else
