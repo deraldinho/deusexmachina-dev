@@ -47,7 +47,7 @@ PROVISION_SCRIPTS_DIR_HOST_PATHNAME = Pathname.new(File.dirname(__FILE__)).join(
 
 # Caminho para os scripts de provisionamento DENTRO DA VM (usado para 'inline' chmod)
 # Assumindo que a pasta 'Resourcer' está na raiz do projeto Vagrant,
-# ela será mapeada para '/home/vagrant/Resourcer' dentro da VM pela sincronização padrão.
+# ela será mapeada para '/vagrant/Resourcer' dentro da VM pela sincronização padrão.
 PROVISION_SCRIPTS_DIR_GUEST = "/vagrant/Resourcer/Scripts"
 
 
@@ -146,7 +146,7 @@ Vagrant.configure("2") do |config|
   # 4. Pastas Sincronizadas
   # A sincronização padrão de "." para "/vagrant" está ativa por padrão.
   # Se você quiser desabilitá-la completamente (conforme discutido para o Samba VM-Interno):
-  # config.vm.synced_folder ".", "/vagrant", disabled: true
+  #config.vm.synced_folder ".", "/vagrant", disabled: true
   # Por enquanto, para o chmod funcionar, vamos assumir que está ativa.
   # Se for desabilitada, a linha de chmod abaixo precisará ser removida ou repensada.
 
@@ -155,7 +155,7 @@ Vagrant.configure("2") do |config|
   # Garante que os scripts tenham permissão de execução
   config.vm.provision "shell",
     name: "Set Execute Permissions",
-    inline: "chmod +x #{PROVISION_SCRIPTS_DIR_GUEST}/*.sh", # CORRIGIDO para usar o caminho da VM
+    inline: "chmod +x #{PROVISION_SCRIPTS_DIR_GUEST}/Resourcer/Scripts/*.sh", # CORRIGIDO para usar o caminho da VM
     run: "once"
 
   # Lista ordenada dos scripts de provisionamento
