@@ -47,7 +47,7 @@ PROVISION_SCRIPTS_DIR_HOST_PATHNAME = Pathname.new(File.dirname(__FILE__)).join(
 
 # Caminho para os scripts de provisionamento DENTRO DA VM (usado para 'inline' chmod)
 # Assumindo que a pasta 'Resourcer' está na raiz do projeto Vagrant,
-# ela será mapeada para '/vagrant/Resourcer' dentro da VM pela sincronização padrão.
+# ela será mapeada para '/home/vagrant/Resourcer' dentro da VM pela sincronização padrão.
 PROVISION_SCRIPTS_DIR_GUEST = "/vagrant/Resourcer/Scripts"
 
 
