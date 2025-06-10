@@ -5,7 +5,7 @@
 set -euo pipefail
 
 echo "---------------------------------------------------------------------"
-echo "🌍 Iniciando a instalação e configuração completa do ngrok..."
+echo "🌍 A iniciar a instalação e configuração completa do ngrok..."
 echo "---------------------------------------------------------------------"
 
 # --- Variáveis (serão passadas pelo Vagrantfile) ---
@@ -25,24 +25,24 @@ command_exists() {
 if command_exists ngrok; then
     echo "✅ ngrok já está instalado. Versão: $(ngrok --version)"
 else
-    echo "   ngrok não encontrado. Iniciando instalação via APT..."
+    echo "   ngrok não encontrado. A iniciar a instalação via APT..."
     
     # Garante que as dependências para adicionar repositórios estejam presentes
     sudo apt-get update -y -qq
     sudo apt-get install -y -qq curl gpg
 
     # Adicionar a chave GPG do repositório do ngrok
-    echo "   Adicionando chave GPG do ngrok..."
+    echo "   A adicionar a chave GPG do ngrok..."
     curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | \
       sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
 
     # Adicionar o repositório APT do ngrok
-    echo "   Adicionando repositório APT do ngrok..."
+    echo "   A adicionar o repositório APT do ngrok..."
     echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | \
       sudo tee /etc/apt/sources.list.d/ngrok.list
 
     # Instalar o ngrok via APT
-    echo "   Atualizando APT e instalando o pacote ngrok..."
+    echo "   A atualizar o APT e a instalar o pacote ngrok..."
     sudo apt-get update -y -qq
     sudo apt-get install -y ngrok
     
@@ -52,14 +52,16 @@ fi
 
 # --- Parte 2: Configuração do Authtoken ---
 
+# A sintaxe ${NGROK_AUTHTOKEN:-} (implícita na definição da variável no topo)
+# evita o erro "unbound variable" com 'set -u'.
 if [ -n "${NGROK_AUTHTOKEN}" ]; then
-    echo "   Configurando authtoken do ngrok automaticamente..."
-    # Executa o comando como o usuário 'vagrant'
+    echo "   A configurar o authtoken do ngrok automaticamente..."
+    # Executa o comando como o utilizador 'vagrant'
     sudo -u vagrant ngrok config add-authtoken "${NGROK_AUTHTOKEN}"
-    echo "✅ Authtoken do ngrok configurado para o usuário 'vagrant'."
+    echo "✅ Authtoken do ngrok configurado para o utilizador 'vagrant'."
 else
-    echo "⚠️  AVISO: Nenhuma variável NGROK_AUTHTOKEN encontrada. O túnel pode não funcionar com domínios estáticos."
-    echo "   Configure-o no seu arquivo .env ou manualmente na VM com: ngrok config add-authtoken SEU_TOKEN"
+    echo "⚠️  AVISO: Nenhuma variável NGROK_AUTHTOKEN encontrada."
+    echo "👉 Para configurar manualmente, aceda à VM com 'vagrant ssh' e execute: ngrok config add-authtoken SEU_TOKEN"
 fi
 
 # --- Parte 3: Criação do Serviço Systemd ---
@@ -74,11 +76,11 @@ echo "   Caminho do executável ngrok encontrado em: ${NGROK_PATH}"
 
 SERVICE_FILE="/etc/systemd/system/ngrok.service"
 
-echo "🚇 Criando e habilitando o serviço systemd para o ngrok..."
-echo "   Configurando o serviço para o domínio: ${NGROK_STATIC_DOMAIN}"
-echo "   Apontando para o endereço: ${N8N_HOST_IP}:${N8N_PORT}"
+echo "🚇 A criar e a habilitar o serviço systemd para o ngrok..."
+echo "   A configurar o serviço para o domínio: ${NGROK_STATIC_DOMAIN}"
+echo "   A apontar para o endereço: ${N8N_HOST_IP}:${N8N_PORT}"
 
-# Criar o arquivo de serviço do systemd usando o caminho correto
+# Criar o ficheiro de serviço do systemd usando o caminho correto
 sudo bash -c "cat > ${SERVICE_FILE}" << EOF
 [Unit]
 Description=Ngrok Tunnel Service for n8n
@@ -96,28 +98,28 @@ RestartSec=10
 WantedBy=multi-user.target
 EOF
 
-echo "✅ Arquivo de serviço criado em ${SERVICE_FILE}."
+echo "✅ Ficheiro de serviço criado em ${SERVICE_FILE}."
 
 # Recarregar o systemd, habilitar e iniciar o serviço
-echo "   Recarregando o daemon do systemd..."
+echo "   A recarregar o daemon do systemd..."
 sudo systemctl daemon-reload
 
-echo "   Habilitando o serviço ngrok para iniciar no boot..."
+echo "   A habilitar o serviço ngrok para iniciar no boot..."
 sudo systemctl enable ngrok.service
 
-echo "   Iniciando o serviço ngrok agora..."
+echo "   A iniciar o serviço ngrok agora..."
 sudo systemctl start ngrok.service
 
-# Verificar o status do serviço
-echo "   Verificando o status do serviço..."
+# Verificar o estado do serviço
+echo "   A verificar o estado do serviço..."
 sleep 2
 if systemctl is-active --quiet ngrok.service; then
-    echo "✅ Serviço ngrok está ativo e rodando."
+    echo "✅ Serviço ngrok está ativo e a rodar."
 else
     echo "❌ Serviço ngrok falhou ao iniciar. Verifique os logs com: journalctl -u ngrok.service"
 fi
 
 echo "---------------------------------------------------------------------"
 echo "✅ Instalação e configuração completa do ngrok concluída."
-echo "   O túnel para '${NGROK_STATIC_DOMAIN}' agora está rodando e iniciará automaticamente com a VM."
+echo "   O túnel para '${NGROK_STATIC_DOMAIN}' agora está a rodar e iniciará automaticamente com a VM."
 echo "---------------------------------------------------------------------"

@@ -192,3 +192,7 @@ Vagrant.configure("2") do |config|
     inline: "echo '#{USE_EMOJIS ? '✅ 🎉' : '[SUCCESS]'} Provisionamento da VM DeuxExMachina concluído! Use \"vagrant ssh\" para conectar.' && echo '#{USE_EMOJIS ? '💡' : '[TIP]'} IP Privado da VM: #{VM_IP_PRIVATE}'",
     run: "always" # Mostra esta mensagem sempre
 end
+# --- Fim do Vagrantfile ---
+# Nota: Este Vagrantfile é um exemplo e pode precisar de ajustes dependendo do ambiente e das necessidades específicas.
+# Certifique-se de que todos os scripts de provisionamento estão corretos e testados antes de executar o Vagrant.
+# Além disso, verifique se as dependências do Vagrant estão instaladas corretamente no seu sistema.
