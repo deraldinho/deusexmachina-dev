@@ -28,6 +28,8 @@ VM_IP_PRIVATE_DEFAULT = "192.168.56.10" # Mudado do seu original para evitar con
 VM_MEMORY_DEFAULT = 4096 # Memória em MB (4GB)
 VM_CPUS_DEFAULT = 2
 VM_DISKSIZE_DEFAULT = '60GB' # Aumentado um pouco para acomodar Docker e dados
+NGROK_AUTHTOKEN = ""
+NGROK_STATIC_DOMAIN = ""
 
 # Leitura das variáveis de ambiente ou uso dos padrões
 VM_BOX = ENV.fetch('VM_BOX', VM_BOX_DEFAULT)
@@ -37,6 +39,8 @@ VM_IP_PRIVATE = ENV.fetch('VM_IP_PRIVATE', VM_IP_PRIVATE_DEFAULT)
 VM_MEMORY = ENV.fetch('VM_MEMORY', VM_MEMORY_DEFAULT).to_i
 VM_CPUS = ENV.fetch('VM_CPUS', VM_CPUS_DEFAULT).to_i
 VM_DISKSIZE = ENV.fetch('VM_DISKSIZE', VM_DISKSIZE_DEFAULT)
+NGROK_AUTHTOKEN = ENV.fetch('NGROK_AUTHTOKEN', NGROK_AUTHTOKEN)
+NGROK_STATIC_DOMAIN = ENV.fetch('NGROK_STATIC_DOMAIN', NGROK_STATIC_DOMAIN)
 
 USE_EMOJIS = ENV.fetch('USE_EMOJIS', 'true').downcase == 'true' # Mantido o seu 'true' como padrão
 
@@ -165,6 +169,7 @@ Vagrant.configure("2") do |config|
     { name: "Node.js & Python",   path: "node_python.sh" },
     { name: "Docker & Watchdog",  path: "docker_watchdog.sh" },
     { name: "Monitoring Tools",   path: "monitoring_tools.sh" },
+    { name: "Ngrok Setup & Service", path: "ngrok_setup.sh", env: { "NGROK_AUTHTOKEN" => NGROK_AUTHTOKEN, "N8N_HOST_IP" => VM_IP_PRIVATE } },
     { name: "Firewall & Security",path: "firewall_security.sh" },
     { name: "Samba Share",        path: "setup_samba_dev_share.sh" } # Script para Samba
   ]
