@@ -39,6 +39,7 @@ declare -a ESSENTIAL_PACKAGES=(
     lsb-release                 # Fornece informações sobre a distribuição Linux
     apt-transport-https         # Permite o uso de repositórios apt via https
     dkms                        # Dynamic Kernel Module Support (IMPORTANTE para VirtualBox Guest Additions)
+    jq                       # Ferramenta de linha de comando para processar JSON       
     # linux-headers-generic       # Geralmente instalado como dependência do dkms ou pela box, mas pode ser explícito se necessário
     # linux-headers-$(uname -r) # Instala os headers para o kernel ATUALMENTE em execução.
                                 # É mais seguro se o 'vagrant-vbguest' for rodar na mesma sessão de provisionamento.

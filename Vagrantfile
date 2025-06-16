@@ -48,23 +48,24 @@ PROVISION_SCRIPTS_DIR_HOST_PATHNAME = Pathname.new(File.dirname(__FILE__)).join(
 # Caminho para os scripts de provisionamento DENTRO DA VM (usado para 'inline' chmod)
 # Assumindo que a pasta 'Resourcer' está na raiz do projeto Vagrant,
 # ela será mapeada para '/vagrant/Resourcer' dentro da VM pela sincronização padrão.
-PROVISION_SCRIPTS_DIR_GUEST = "/vagrant/Resourcer/Scripts"
+PROVISION_SCRIPTS_DIR_GUEST = "/vagrant"
 
 
 # Lista de portas a serem encaminhadas (mantendo a sua lista extensa)
 FORWARDED_PORTS_LIST = [
   80, 443, 3000, 5000, 8000, 8080, # Web & APIs
-  # 22, # SSH - Vagrant geralmente cuida disso em uma porta alta. Se precisar da 22, cuidado com conflitos.
-  3306, 5432, 27017, 6379,        # Bancos de Dados
-  1883, 8883,                     # MQTT
-  5683,                           # CoAP (UDP, mas o encaminhamento padrão é TCP. Precisa especificar protocolo se UDP)
-  502,                            # Modbus
-  # 123,                            # NTP (UDP, mesma observação do CoAP)
-  47808,                          # BACnet (UDP)
-  9000,                           # Node-RED (Exemplo)
-  4222,                           # NATS
-  61616,                          # ActiveMQ
-  19999                           # Netdata
+  #22,                              # SSH - Vagrant geralmente cuida disso em uma porta alta. Se precisar da 22, cuidado com conflitos.
+  3306, 5432, 27017, 6379,          # Bancos de Dados
+  1883, 8883,                       # MQTT
+  5683,                             # CoAP (UDP, mas o encaminhamento padrão é TCP. Precisa especificar protocolo se UDP)
+  502,                              # Modbus
+  123,                              # NTP (UDP, mesma observação do CoAP)
+  47808,                            # BACnet (UDP)
+  9000,                             # Node-RED (Exemplo)
+  4222,                             # NATS
+  61616,                            # ActiveMQ
+  19999,                            # Netdata
+  5678,11434                             # N8N (Node-RED)
 ]
 
 # --- Verificação de Plugins Vagrant Obrigatórios ---
@@ -146,7 +147,7 @@ Vagrant.configure("2") do |config|
   # 4. Pastas Sincronizadas
   # A sincronização padrão de "." para "/vagrant" está ativa por padrão.
   # Se você quiser desabilitá-la completamente (conforme discutido para o Samba VM-Interno):
-  #config.vm.synced_folder ".", "/vagrant", disabled: true
+    config.vm.synced_folder ".", "/vagrant", disabled: false
   # Por enquanto, para o chmod funcionar, vamos assumir que está ativa.
   # Se for desabilitada, a linha de chmod abaixo precisará ser removida ou repensada.
 

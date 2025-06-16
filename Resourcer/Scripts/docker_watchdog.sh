@@ -109,8 +109,8 @@ fi
 # 7. Limpeza do APT (Opcional - considerar se o essentials.sh já fez uma limpeza geral)
 # Se este script for autônomo ou o último a rodar com 'apt-get install', a limpeza é recomendada.
 # echo "🧹 Limpando o cache do APT e pacotes não mais necessários..."
-# sudo apt-get autoremove -y
-# sudo apt-get clean -y
+sudo apt-get autoremove -y
+sudo apt-get clean -y
 # sudo rm -rf /var/lib/apt/lists/* # Cuidado se outro script for usar as listas logo depois
 
 echo "---------------------------------------------------------------------"

@@ -65,7 +65,7 @@ else
 
     # Opcional: Atualizar npm para a versão mais recente
     # echo "   Atualizando npm para a versão mais recente..."
-    # sudo npm install -g npm@latest
+    sudo npm install 
     # echo "   npm atualizado para: $(npm -v)"
 fi
 
