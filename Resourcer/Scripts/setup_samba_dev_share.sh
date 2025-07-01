@@ -7,7 +7,7 @@ set -euo pipefail
 # Diretório base na VM que será criado e compartilhado (NÃO sincronizado com o host)
 VM_INTERNAL_BASE_DIR="/home/vagrant"
 # Subdiretório para os projetos de IA dentro do diretório base
-PROJECTS_SUBDIR="Projetos"
+PROJECTS_SUBDIR="projetos"
 # Caminho completo na VM para a pasta de projetos
 PROJECTS_FULL_PATH="${VM_INTERNAL_BASE_DIR}/${PROJECTS_SUBDIR}"
 

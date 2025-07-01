@@ -54,7 +54,6 @@ PROVISION_SCRIPTS_DIR_GUEST = "/vagrant"
 # Lista de portas a serem encaminhadas (mantendo a sua lista extensa)
 FORWARDED_PORTS_LIST = [
   80, 443, 3000, 5000, 8000, 8080, # Web & APIs
-  #22,                              # SSH - Vagrant geralmente cuida disso em uma porta alta. Se precisar da 22, cuidado com conflitos.
   3306, 5432, 27017, 6379,          # Bancos de Dados
   1883, 8883,                       # MQTT
   5683,                             # CoAP (UDP, mas o encaminhamento padrão é TCP. Precisa especificar protocolo se UDP)
@@ -64,15 +63,20 @@ FORWARDED_PORTS_LIST = [
   9000,                             # Node-RED (Exemplo)
   4222,                             # NATS
   61616,                            # ActiveMQ
-  19999,                            # Netdata
-  5678,11434                             # N8N (Node-RED)
+  19999,                            # Netdata (mantido do script, mas não do docker-compose atual)
+  5678,                             # n8n UI/API
+  11434,                            # Ollama API
+  8086,                             # InfluxDB
+  6333,                             # Qdrant
+  8080                              # OpenWebUI (cuidado com conflito se já tiver 8080 para APIs)
 ]
 
 # --- Verificação de Plugins Vagrant Obrigatórios ---
 REQUIRED_PLUGINS = {
   'vagrant-disksize' => 'Configure VM disk size',
   'vagrant-vbguest'  => 'Keep VirtualBox Guest Additions up to date',
-  'vagrant-reload'   => 'Reload VM during provisioning if needed'
+  'vagrant-reload'   => 'Reload VM during provisioning if needed',
+  'vagrant-env'      => 'Reload VM during provisioning if needed'
 }
 
 puts "#{USE_EMOJIS ? '🔌' : '[INFO]'} Verificando plugins Vagrant necessários..."

@@ -3,7 +3,8 @@ $plugins = @(
     "vagrant-vbguest",
     "vagrant-disksize",
     "vagrant-scp",
-    "vagrant-reload"
+    "vagrant-reload",
+    "vagrant-env"
 )
 
 Write-Host "Verificando plugins do Vagrant..."
