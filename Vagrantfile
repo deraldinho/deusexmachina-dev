@@ -67,8 +67,8 @@ FORWARDED_PORTS_LIST = [
   5678,                             # n8n UI/API
   11434,                            # Ollama API
   8086,                             # InfluxDB
-  6333,                             # Qdrant
-  8080                              # OpenWebUI (cuidado com conflito se já tiver 8080 para APIs)
+  6333                              # Qdrant
+  # 8080                            # OpenWebUI (removido para evitar duplicidade com APIs)
 ]
 
 # --- Verificação de Plugins Vagrant Obrigatórios ---
@@ -76,7 +76,7 @@ REQUIRED_PLUGINS = {
   'vagrant-disksize' => 'Configure VM disk size',
   'vagrant-vbguest'  => 'Keep VirtualBox Guest Additions up to date',
   'vagrant-reload'   => 'Reload VM during provisioning if needed',
-  'vagrant-env'      => 'Reload VM during provisioning if needed'
+  'vagrant-env'      => 'Load environment variables from .env files'
 }
 
 puts "#{USE_EMOJIS ? '🔌' : '[INFO]'} Verificando plugins Vagrant necessários..."
@@ -150,8 +150,8 @@ Vagrant.configure("2") do |config|
 
   # 4. Pastas Sincronizadas
   # A sincronização padrão de "." para "/vagrant" está ativa por padrão.
-  # Se você quiser desabilitá-la completamente (conforme discutido para o Samba VM-Interno):
-    config.vm.synced_folder ".", "/vagrant", disabled: false
+  # Se você quiser desabilitá-la completamente (conforme discutido para o Samba VM-Interno), descomente a linha abaixo e ajuste conforme necessário:
+    config.vm.synced_folder ".", "/vagrant"
   # Por enquanto, para o chmod funcionar, vamos assumir que está ativa.
   # Se for desabilitada, a linha de chmod abaixo precisará ser removida ou repensada.
 
@@ -189,6 +189,6 @@ Vagrant.configure("2") do |config|
   # Mensagem final após o provisionamento
   config.vm.provision "shell",
     name: "Provisioning Complete Message",
-    inline: "echo '#{USE_EMOJIS ? '✅ 🎉' : '[SUCCESS]'} Provisionamento da VM DeuxExMachina concluído! Use \"vagrant ssh\" para conectar.' && echo '#{USE_EMOJIS ? '💡' : '[TIP]'} IP Privado da VM: #{VM_IP_PRIVATE}'",
+    inline: "echo '#{USE_EMOJIS ? '✅ 🎉' : '[SUCCESS]'} Provisionamento da VM DeusExMachina concluído! Use \"vagrant ssh\" para conectar.' && echo '#{USE_EMOJIS ? '💡' : '[TIP]'} IP Privado da VM: #{VM_IP_PRIVATE}'",
     run: "always" # Mostra esta mensagem sempre
 end
