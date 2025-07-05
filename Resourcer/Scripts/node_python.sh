@@ -13,7 +13,7 @@ command_exists() {
 }
 
 # Versão desejada do Node.js (para o repositório NodeSource)
-NODE_MAJOR_VERSION="18" # Você pode mudar para "20", "22", etc., conforme necessário
+NODE_MAJOR_VERSION="22" # Você pode mudar para "20", "22", etc., conforme necessário
 
 # 1. Atualizar lista de pacotes (se não foi feito recentemente por outro script)
 echo "🔄 Atualizando lista de pacotes do APT (pode ser rápido se já atualizado)..."
