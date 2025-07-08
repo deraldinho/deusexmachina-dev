@@ -111,6 +111,10 @@ Vagrant.configure("2") do |config|
     vb.memory = VM_MEMORY
     vb.cpus = VM_CPUS
 
+    # Habilitar aceleração 3D e aumentar VRAM para melhor desempenho gráfico
+    vb.customize ["modifyvm", :id, "--vram", "128"]
+    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+
     # Otimizações de rede (opcional, pode ajudar em alguns casos)
     # vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     # vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
