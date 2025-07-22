@@ -14,15 +14,15 @@ command_exists() {
 
 # 1. Atualizar lista de pacotes (se não foi feito recentemente por outro script)
 # Se o 'essentials.sh' sempre rodar antes, esta linha pode ser opcional aqui.
-echo "🔄 Atualizando lista de pacotes do APT (pode ser rápido se já atualizado)..."
-sudo apt-get update -y
+echo "🔄 Atualizando lista de pacotes do DNF (pode ser rápido se já atualizado)..."
+sudo dnf makecache -q
 
 # 2. Instalar htop
 echo " নজর Instalando htop..."
 if command_exists htop; then
     echo "✅ htop já está instalado."
 else
-    sudo apt-get install -y htop
+    sudo dnf install -y htop
     echo "✅ htop instalado com sucesso."
 fi
 
@@ -34,7 +34,7 @@ else
     # Garante que python3-pip está instalado
     if ! command_exists pip3; then
         echo "   Instalando python3-pip como dependência para Glances..."
-        sudo apt-get install -y python3-pip
+        sudo dnf install -y python3-pip
         echo "   python3-pip instalado."
     fi
     echo "   Instalando Glances via pip3..."
@@ -73,11 +73,7 @@ fi
 # echo "   Status do serviço Netdata:"
 # sudo systemctl status netdata.service --no-pager -l
 
-# 6. Limpeza do APT (Opcional)
-# echo "🧹 Limpando o cache do APT e pacotes não mais necessários..."
-# sudo apt-get autoremove -y
-# sudo apt-get clean -y
-# sudo rm -rf /var/lib/apt/lists/*
+
 
 echo "---------------------------------------------------------------------"
 echo "✅ Ferramentas de monitoramento instaladas e configuradas!"

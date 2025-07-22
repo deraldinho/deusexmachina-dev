@@ -12,7 +12,7 @@ O DeuxExMachina visa ser uma plataforma de inteligência artificial modular e "A
 * **Workspace de Desenvolvimento:**
     * Uma pasta `/home/vagrant/Projetos` (ou similar, conforme definido no script Samba) existe *exclusivamente dentro da VM*.
     * Esta pasta **não é sincronizada** com o computador host via Vagrant `synced_folder`.
-    * O acesso a este workspace a partir do computador host é feito via **Samba**, compartilhando a pasta `/home/vagrant` (ou a pasta base escolhida) da VM.
+    * O acesso a este workspace a partir do computador host é feito via **Samba**, com a senha do usuário `vagrant` podendo ser configurada via a variável `SAMBA_PASSWORD` no arquivo `.env` do host.
 * **Containerização:** Todos os componentes da IA (os "brains"), bancos de dados e serviços de mensageria (MQTT) rodarão como contêineres Docker, orquestrados por um arquivo `docker-compose.yml` localizado no workspace de desenvolvimento.
 
 ## 3. Arquitetura dos "Brains" de IA

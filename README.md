@@ -48,19 +48,12 @@ O desenvolvimento e interação com este ambiente serão facilitados por um comp
 
 3.  **Configurar Variáveis de Ambiente (Opcional):**
     * Copie o arquivo `.env.example` (se existir) para `.env`.
-    * Edite o arquivo `.env` para personalizar configurações como memória da VM, CPUs, IPs, etc. O `Vagrantfile` usará valores padrão se o `.env` não existir ou uma variável específica não estiver definida.
+    * Edite o arquivo `.env` para personalizar configurações como memória da VM, CPUs, IPs, e a senha do Samba (`SAMBA_PASSWORD`). O `Vagrantfile` usará valores padrão se o `.env` não existir ou uma variável específica não estiver definida.
 
-4.  **Instalar Plugins Vagrant (se necessário):**
-    * Os scripts `install_vagrant_plugins.sh` (para Linux/macOS) ou `install_vagrant_plugins.ps1` (para Windows PowerShell) podem ser usados, ou o `Vagrantfile` tentará verificar os plugins essenciais (`vagrant-disksize`, `vagrant-vbguest`, `vagrant-reload`).
-    * Execute no seu host:
-        ```bash
-        # Para Linux/macOS
-        ./Resourcer/Scripts/install_vagrant_plugins.sh
-        # Ou para Windows (PowerShell)
-        .\Resourcer\Scripts\install_vagrant_plugins.ps1
-        ```
 
-5.  **Iniciar a Máquina Virtual com Vagrant:**
+    
+
+4.  **Iniciar a Máquina Virtual com Vagrant:**
     * Use os scripts `start_dev.sh` (Linux/macOS) ou `start_dev.ps1` (Windows) na raiz do projeto:
         ```bash
         # Para Linux/macOS
@@ -74,12 +67,10 @@ O desenvolvimento e interação com este ambiente serão facilitados por um comp
         ```
     * Na primeira vez, o Vagrant baixará a box da VM e executará todos os scripts de provisionamento. Isso pode levar alguns minutos.
 
-6.  **Configurar Senha do Samba na VM:**
-    * Após o provisionamento ser concluído, acesse a VM:
-        ```bash
-        vagrant ssh
-        ```
-    * Dentro da VM, defina uma senha para o usuário `vagrant` no Samba (esta senha será usada para acessar o compartilhamento do seu computador host):
+5.  **Configurar Senha do Samba:**
+    * A senha para o usuário `vagrant` no Samba pode ser definida via a variável `SAMBA_PASSWORD` no seu arquivo `.env`.
+    * Se `SAMBA_PASSWORD` for definida no `.env`, a senha será configurada automaticamente durante o provisionamento.
+    * Se `SAMBA_PASSWORD` não for definida ou estiver vazia no `.env`, a senha não será configurada automaticamente. Você precisará defini-la manualmente após o provisionamento, acessando a VM via `vagrant ssh` e executando:
         ```bash
         sudo smbpasswd -a vagrant
         ```

@@ -30,15 +30,15 @@ echo "   NOTA: Este diretório (${VM_INTERNAL_BASE_DIR}) NÃO é sincronizado co
 echo "---------------------------------------------------------------------"
 
 # 1. Atualizar lista de pacotes
-echo "🔄 Atualizando lista de pacotes do APT..."
-sudo apt-get update -y
+echo "🔄 Atualizando lista de pacotes do DNF..."
+sudo dnf makecache -q
 
 # 2. Instalar Samba e suas dependências
 echo "🛠️  Instalando Samba e dependências..."
-if dpkg -s samba &> /dev/null; then
+if rpm -q samba &> /dev/null; then
     echo "✅ Samba já está instalado."
 else
-    sudo apt-get install -y samba samba-common-bin
+    sudo dnf install -y samba samba-common-bin
     echo "✅ Samba instalado."
 fi
 
@@ -59,10 +59,10 @@ if [ ! -f "${SMB_CONF}.original" ]; then
 fi
 
 if grep -q "\[${SAMBA_SHARE_NAME}\]" "${SMB_CONF}"; then
-    echo "✅ Configuração para [${SAMBA_SHARE_NAME}] já existe em ${SMB_CONF}."
+    echo "✅ Configuração para \[${SAMBA_SHARE_NAME}\] já existe em ${SMB_CONF}."
     echo "   Verifique se está correta ou remova-a manualmente para reconfigurar."
 else
-    echo "   Adicionando configuração para [${SAMBA_SHARE_NAME}]..."
+    echo "   Adicionando configuração para \[${SAMBA_SHARE_NAME}\]..."
     # Compartilhando o diretório VM_INTERNAL_BASE_DIR (/vagrant)
     sudo bash -c "cat >> ${SMB_CONF}" << EOF
 
@@ -79,7 +79,7 @@ else
    force user = ${SAMBA_USER}
    force group = ${SAMBA_GROUP}
 EOF
-    echo "✅ Configuração de [${SAMBA_SHARE_NAME}] adicionada."
+    echo "✅ Configuração de \[${SAMBA_SHARE_NAME}\] adicionada."
 fi
 
 echo "🧪 Testando a configuração do Samba (testparm)..."
@@ -132,14 +132,14 @@ sudo systemctl status smbd.service --no-pager -l || true
 echo "   Status do nmbd:"
 sudo systemctl status nmbd.service --no-pager -l || true
 
-# 7. Configurar Firewall (UFW) para Samba
-if command -v ufw &> /dev/null && sudo ufw status | grep -q "Status: active"; then
-    echo "🔥 Configurando UFW para permitir tráfego Samba..."
-    sudo ufw allow samba
-    sudo ufw reload
-    echo "✅ Regras do UFW para Samba aplicadas."
+# 7. Configurar Firewall (Firewalld) para Samba
+if command -v firewall-cmd &> /dev/null && sudo systemctl is-active --quiet firewalld; then
+    echo "🔥 Configurando Firewalld para permitir tráfego Samba..."
+    sudo firewall-cmd --zone=public --add-service=samba --permanent
+    sudo firewall-cmd --reload
+    echo "✅ Regras do Firewalld para Samba aplicadas."
 else
-    echo "⚠️  UFW não está ativo ou não foi encontrado."
+    echo "⚠️  Firewalld não está ativo ou não foi encontrado."
 fi
 
 echo "---------------------------------------------------------------------"
@@ -149,7 +149,7 @@ echo "➡️  Para acessar o compartilhamento '${SAMBA_SHARE_NAME}' do seu compu
 echo "   1. Defina uma senha para o usuário Samba '${SAMBA_USER}' na VM:"
 echo "      Execute na VM: sudo smbpasswd -a ${SAMBA_USER}"
 echo "   2. Acesse via explorador de arquivos do HOST (substitua SEU_IP_VM pelo IP da VM, ex: 192.168.56.10):"
-echo "      - Windows: \\\\SEU_IP_VM\\${SAMBA_SHARE_NAME}"
+echo "      - Windows: \\SEU_IP_VM\${SAMBA_SHARE_NAME}"
 echo "      - macOS: Finder -> Ir -> Conectar ao Servidor -> smb://SEU_IP_VM/${SAMBA_SHARE_NAME}"
 echo "      - Linux: smb://SEU_IP_VM/${SAMBA_SHARE_NAME}"
 echo "   3. Use o usuário '${SAMBA_USER}' e a senha Samba definida."

@@ -21,8 +21,8 @@ env_file = Pathname.new(File.dirname(__FILE__)).join('.env')
 load_env(env_file) if env_file.file?
 
 # --- Configurações e Variáveis Globais ---
-VM_BOX_DEFAULT = "ubuntu/jammy64"  # Ubuntu 22.04 LTS
-VM_BOX_VERSION_DEFAULT = "20240522.0.0" # Exemplo de versão, verifique a mais recente estável
+VM_BOX_DEFAULT = "hashicorp/centos-stream-10"  # CentOS Stream 10
+VM_BOX_VERSION_DEFAULT = "latest" # Usar a versão mais recente disponível
 VM_HOSTNAME_DEFAULT = "DeusExMachina-VM"
 VM_IP_PRIVATE_DEFAULT = "192.168.56.10" # Mudado do seu original para evitar conflitos comuns com 192.168.33.x
 VM_MEMORY_DEFAULT = 4096 # Memória em MB (4GB)
@@ -191,6 +191,9 @@ Vagrant.configure("2") do |config|
     puts "  #{USE_EMOJIS ? '📜' : '[PROVISION]'} Agendado: #{script_info[:name]} (#{script_info[:path]})"
   end
   
+  # Adiciona o health check
+  provision_scripts_ordered << { name: "Health Check", path: "health_check.sh" }
+
   # Mensagem final após o provisionamento
   config.vm.provision "shell",
     name: "Provisioning Complete Message",

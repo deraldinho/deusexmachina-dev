@@ -37,66 +37,31 @@ echo "   Hora atual do sistema (após possível ajuste de timezone): $(date)"
 # 2. Configurar Locale
 echo "➡️  Configurando Locale..."
 
-# Verificar se o pacote de locales está instalado (geralmente está, mas é uma boa checagem)
-if ! dpkg -s locales &> /dev/null; then
-    echo "   Pacote 'locales' não encontrado. Instalando..."
-    sudo apt-get update -y # Atualizar se não foi feito recentemente
-    sudo apt-get install -y locales
-    echo "   Pacote 'locales' instalado."
+# Verificar se o pacote de locales está instalado
+if ! rpm -q glibc-langpack-pt_BR &> /dev/null; then
+    echo "   Pacote de locale 'glibc-langpack-pt_BR' não encontrado. Instalando..."
+    sudo dnf install -y glibc-langpack-pt_BR
+    echo "   Pacote de locale 'glibc-langpack-pt_BR' instalado."
 fi
 
-# Verificar se o locale alvo já está gerado
-# Usamos sed para escapar o ponto no nome do locale para o grep
-ESCAPED_TARGET_LOCALE_UTF8=$(echo "${TARGET_LOCALE_UTF8}" | sed 's/\./\\./g')
-if locale -a | grep -q "^${ESCAPED_TARGET_LOCALE_UTF8}$"; then
-    echo "✅ Locale ${TARGET_LOCALE_UTF8} já está gerado."
-else
-    echo "   Gerando locale ${TARGET_LOCALE_UTF8}..."
-    # Adiciona a linha ao /etc/locale.gen se não existir e então roda locale-gen
-    if ! grep -q "^${TARGET_LOCALE_UTF8} UTF-8$" /etc/locale.gen; then
-        echo "   Adicionando ${TARGET_LOCALE_UTF8} UTF-8 ao /etc/locale.gen"
-        sudo sed -i "/^# ${TARGET_LOCALE_UTF8} UTF-8$/s/^# //" /etc/locale.gen # Tenta descomentar primeiro
-        if ! grep -q "^${TARGET_LOCALE_UTF8} UTF-8$" /etc/locale.gen; then # Se não encontrou para descomentar
-             echo "${TARGET_LOCALE_UTF8} UTF-8" | sudo tee -a /etc/locale.gen > /dev/null
-        fi
-    fi
-    sudo locale-gen "${TARGET_LOCALE_UTF8}"
-    echo "✅ Locale ${TARGET_LOCALE_UTF8} gerado."
-fi
-
-# Definir o locale padrão do sistema
-# Verificamos o arquivo /etc/default/locale para ver se já está correto.
-LOCALE_CONFIG_FILE="/etc/default/locale"
+# Definir o locale padrão do sistema usando localectl
 NEEDS_UPDATE=false
+CURRENT_LANG=$(localectl status | grep "System Locale" | cut -d '=' -f2 | tr -d ' ')
 
-if [ -f "${LOCALE_CONFIG_FILE}" ]; then
-    if ! grep -Fxq "LANG=${TARGET_LANG}" "${LOCALE_CONFIG_FILE}" || \
-       ! grep -Fxq "LC_ALL=${TARGET_LOCALE_UTF8}" "${LOCALE_CONFIG_FILE}" || \
-       ! grep -Fxq "LANGUAGE=${TARGET_LANGUAGE}" "${LOCALE_CONFIG_FILE}"; then
-        NEEDS_UPDATE=true
-    fi
-else
-    NEEDS_UPDATE=true # Arquivo não existe, precisa ser criado/atualizado
+if [ "${CURRENT_LANG}" != "${TARGET_LANG}" ]; then
+    NEEDS_UPDATE=true
 fi
 
 if [ "${NEEDS_UPDATE}" = true ]; then
     echo "   Definindo locale padrão do sistema para LANG=${TARGET_LANG}, LC_ALL=${TARGET_LOCALE_UTF8}, LANGUAGE=${TARGET_LANGUAGE}..."
-    # update-locale é a ferramenta padrão para isso no Debian/Ubuntu
-    sudo update-locale "LANG=${TARGET_LANG}" \
-                       "LC_ALL=${TARGET_LOCALE_UTF8}" \
-                       "LANGUAGE=${TARGET_LANGUAGE}"
-    echo "✅ Locale padrão do sistema atualizado via update-locale."
+    sudo localectl set-locale "LANG=${TARGET_LANG}" "LC_ALL=${TARGET_LOCALE_UTF8}"
+    # localectl não tem uma opção direta para LANGUAGE, mas LANG e LC_ALL são os mais importantes
+    echo "✅ Locale padrão do sistema atualizado via localectl."
 else
-    echo "✅ Locale padrão do sistema já está configurado corretamente em ${LOCALE_CONFIG_FILE}."
+    echo "✅ Locale padrão do sistema já está configurado corretamente."
 fi
 
 echo "   Configurações de locale (podem requerer nova sessão para efeito completo):"
-echo "   Conteúdo de ${LOCALE_CONFIG_FILE}:"
-if [ -f "${LOCALE_CONFIG_FILE}" ]; then
-    cat "${LOCALE_CONFIG_FILE}"
-else
-    echo "   Arquivo ${LOCALE_CONFIG_FILE} não encontrado."
-fi
 echo "   Saída do comando 'locale':"
 locale
 
