@@ -76,6 +76,7 @@ REQUIRED_PLUGINS = {
   'vagrant-disksize' => 'Configure VM disk size',
   'vagrant-vbguest'  => 'Keep VirtualBox Guest Additions up to date',
   'vagrant-reload'   => 'Reload VM during provisioning if needed',
+  'vagrant-scp'      => 'SCP file transfers to/from VM',
   'vagrant-env'      => 'Load environment variables from .env files'
 }
 
@@ -175,7 +176,7 @@ Vagrant.configure("2") do |config|
     { name: "Docker & Watchdog",  path: "docker_watchdog.sh" },
     { name: "Monitoring Tools",   path: "monitoring_tools.sh" },
     { name: "Firewall & Security",path: "firewall_security.sh" },
-    { name: "Samba Share",        path: "setup_samba_dev_share.sh" } # Script para Samba
+    { name: "Samba Share",        path: "setup_samba_dev_share.sh", args: "SAMBA_PASSWORD=\"#{ENV['SAMBA_PASSWORD']}\"" } # Script para Samba
   ]
 
   provision_scripts_ordered.each do |script_info|

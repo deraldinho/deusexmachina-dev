@@ -87,9 +87,38 @@ sudo testparm -s
 
 # 5. Configurar usuário Samba
 echo "👤 Configurando o usuário '${SAMBA_USER}' para o Samba..."
-echo "   ‼️  IMPORTANTE: A senha para o usuário Samba '${SAMBA_USER}' precisa ser definida."
-echo "   Execute na VM (via 'vagrant ssh'): sudo smbpasswd -a ${SAMBA_USER}"
-sudo smbpasswd -e "${SAMBA_USER}" &> /dev/null || true
+
+# Extrai SAMBA_PASSWORD dos argumentos
+SAMBA_PASSWORD=""
+for arg in "$@"; do
+    if [[ "$arg" == SAMBA_PASSWORD=* ]]; then
+        SAMBA_PASSWORD="${arg#SAMBA_PASSWORD=}"
+        # Remove as aspas se existirem
+        SAMBA_PASSWORD="${SAMBA_PASSWORD%\"}"
+        SAMBA_PASSWORD="${SAMBA_PASSWORD#\"}"
+        break
+    fi
+done
+
+if [ -n "${SAMBA_PASSWORD}" ]; then
+    echo "   Definindo senha para o usuário '${SAMBA_USER}'..."
+    # Cria o usuário Samba e define a senha de forma não interativa
+    # O 'pdbedit -a -u vagrant' garante que o usuário existe no banco de dados do Samba
+    # O 'echo -e' com a senha duas vezes e 'smbpasswd -s' define a senha
+    echo -e "${SAMBA_PASSWORD}\n${SAMBA_PASSWORD}" | sudo smbpasswd -a -s "${SAMBA_USER}"
+    if [ $? -eq 0 ]; then
+        echo "✅ Senha do usuário '${SAMBA_USER}' definida com sucesso."
+    else
+        echo "❌ Falha ao definir a senha para o usuário '${SAMBA_USER}'. Verifique o log."
+    fi
+else
+    echo "   ⚠️  Variável SAMBA_PASSWORD não fornecida ou vazia no .env."
+    echo "   A senha para o usuário Samba '${SAMBA_USER}' NÃO será definida automaticamente."
+    echo "   Para proteger o compartilhamento, você precisará definir a senha manualmente:"
+    echo "   Execute na VM (via 'vagrant ssh'): sudo smbpasswd -a ${SAMBA_USER}"
+    # Garante que o usuário esteja habilitado no Samba, mesmo sem senha definida
+    sudo smbpasswd -e "${SAMBA_USER}" &> /dev/null || true
+fi
 
 # 6. Reiniciar serviços Samba
 echo "🔄 Reiniciando os serviços Samba (smbd e nmbd)..."
