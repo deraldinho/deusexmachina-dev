@@ -20,7 +20,7 @@ sudo dnf makecache -q
 # 2. Garantir dependências para adicionar repositórios
 # Muitos destes já devem ter sido instalados pelo 'essentials.sh' melhorado.
 echo "🛠️  Garantindo dependências para repositórios (ca-certificates, curl, gnupg2, redhat-lsb-core)..."
-sudo dnf install -y ca-certificates curl gnupg2 redhat-lsb-core
+sudo dnf install -y ca-certificates curl gnupg2 lsb_release
 
 # 3. Instalar Docker Engine
 if command_exists docker; then

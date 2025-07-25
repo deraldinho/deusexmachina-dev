@@ -29,16 +29,16 @@ declare -a ESSENTIAL_PACKAGES=(
     curl
     wget
     unzip
-    @development-tools          # Grupo de ferramentas de desenvolvimento (equivalente a build-essential)
-    epel-release                # Repositório EPEL para pacotes adicionais (como jq)
+    @"Development Tools"          # Grupo de ferramentas de desenvolvimento
     ca-certificates             # Permite que o sistema verifique certificados SSL/TLS
     gnupg2                      # Para gerenciamento de chaves GPG
-    redhat-lsb-core             # Fornece informações sobre a distribuição Linux (lsb_release)
+    lsb_release                 # Fornece informações sobre a distribuição Linux (lsb_release)
     dkms                        # Dynamic Kernel Module Support (IMPORTANTE para VirtualBox Guest Additions)
-    jq                          # Ferramenta de linha de comando para processar JSON       
-    # kernel-headers              # Headers do kernel (geralmente necessário para dkms)
-    # kernel-devel                # Desenvolvimento do kernel (geralmente necessário para dkms)
+    jq                          # Ferramenta de linha de comando para processar JSON
+    kernel-devel                # Desenvolvimento do kernel (necessário para VBox Guest Additions)
 )
+
+sudo dnf install -y -q epel-release
 
 echo "🛠️  Instalando pacotes essenciais: ${ESSENTIAL_PACKAGES[*]}..."
 sudo dnf install -y -q "${ESSENTIAL_PACKAGES[@]}"

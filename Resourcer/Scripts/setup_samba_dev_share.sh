@@ -38,7 +38,7 @@ echo "🛠️  Instalando Samba e dependências..."
 if rpm -q samba &> /dev/null; then
     echo "✅ Samba já está instalado."
 else
-    sudo dnf install -y samba samba-common-bin
+    sudo dnf install -y samba samba-common
     echo "✅ Samba instalado."
 fi
 
@@ -122,15 +122,15 @@ fi
 
 # 6. Reiniciar serviços Samba
 echo "🔄 Reiniciando os serviços Samba (smbd e nmbd)..."
-sudo systemctl restart smbd.service
-sudo systemctl restart nmbd.service
-sudo systemctl enable smbd.service
-sudo systemctl enable nmbd.service
+sudo systemctl restart smb.service
+sudo systemctl restart nmb.service
+sudo systemctl enable smb.service
+sudo systemctl enable nmb.service
 
-echo "   Status do smbd:"
-sudo systemctl status smbd.service --no-pager -l || true
-echo "   Status do nmbd:"
-sudo systemctl status nmbd.service --no-pager -l || true
+echo "   Status do smb:"
+sudo systemctl status smb.service --no-pager -l || true
+echo "   Status do nmb:"
+sudo systemctl status nmb.service --no-pager -l || true
 
 # 7. Configurar Firewall (Firewalld) para Samba
 if command -v firewall-cmd &> /dev/null && sudo systemctl is-active --quiet firewalld; then

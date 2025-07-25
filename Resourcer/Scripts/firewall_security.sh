@@ -28,15 +28,16 @@ echo "🔥 Configurando regras do Firewalld..."
 
 # Habilitar e iniciar o serviço Firewalld
 echo "   Habilitando e iniciando o serviço Firewalld..."
-sudo systemctl enable firewalld --now
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
 
 # Definir zona padrão (public é comum)
 echo "   Definindo zona padrão para 'public'."
-sudo firewall-cmd --set-default-zone=public --permanent
+sudo firewall-cmd --set-default-zone=public
 
 # Permitir conexões SSH
 echo "   Permitindo conexões SSH na porta ${SSH_PORT}/tcp."
-sudo firewall-cmd --zone=public --add-port=${SSH_PORT}/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=${SSH_PORT}/tcp
 
 # Listas de portas a serem abertas
 declare -a API_PORTS=(80 443 3000 5000 8000 8080)
@@ -44,30 +45,30 @@ declare -a DB_PORTS=(3306 5432 27017 6379) # MySQL, PostgreSQL, MongoDB, Redis
 
 echo "   Liberando portas para APIs e Web (TCP): ${API_PORTS[*]}"
 for port in "${API_PORTS[@]}"; do
-    sudo firewall-cmd --zone=public --add-port=${port}/tcp --permanent
+    sudo firewall-cmd --zone=public --add-port=${port}/tcp
 done
 
 echo "   Liberando portas para Bancos de Dados (TCP): ${DB_PORTS[*]}"
 for port in "${DB_PORTS[@]}"; do
-    sudo firewall-cmd --zone=public --add-port=${port}/tcp --permanent
+    sudo firewall-cmd --zone=public --add-port=${port}/tcp
 done
 
 echo "   Liberando portas para IoT e Automação:"
-sudo firewall-cmd --zone=public --add-port=1883/tcp --permanent    # MQTT
-sudo firewall-cmd --zone=public --add-port=8883/tcp --permanent    # MQTT Secure
-sudo firewall-cmd --zone=public --add-port=5683/udp --permanent    # CoAP (UDP)
-sudo firewall-cmd --zone=public --add-port=502/tcp --permanent     # Modbus
+sudo firewall-cmd --zone=public --add-port=1883/tcp     # MQTT
+sudo firewall-cmd --zone=public --add-port=8883/tcp     # MQTT Secure
+sudo firewall-cmd --zone=public --add-port=5683/udp     # CoAP (UDP)
+sudo firewall-cmd --zone=public --add-port=502/tcp      # Modbus
 
 echo "   Liberando outras portas específicas (conforme script original):"
-sudo firewall-cmd --zone=public --add-port=47808/udp --permanent   # BACnet
-sudo firewall-cmd --zone=public --add-port=9000/tcp --permanent    # Exemplo: Node-RED
-sudo firewall-cmd --zone=public --add-port=4222/tcp --permanent    # NATS
-sudo firewall-cmd --zone=public --add-port=61616/tcp --permanent   # ActiveMQ
-sudo firewall-cmd --zone=public --add-port=19999/tcp --permanent   # Netdata
+sudo firewall-cmd --zone=public --add-port=47808/udp    # BACnet
+sudo firewall-cmd --zone=public --add-port=9000/tcp     # Exemplo: Node-RED
+sudo firewall-cmd --zone=public --add-port=4222/tcp     # NATS
+sudo firewall-cmd --zone=public --add-port=61616/tcp    # ActiveMQ
+sudo firewall-cmd --zone=public --add-port=19999/tcp    # Netdata
 
 # Recarregar Firewalld para aplicar as regras
-echo "   Recarregando Firewalld para aplicar as regras..."
-sudo firewall-cmd --reload
+echo "   Tornando as regras permanentes..."
+sudo firewall-cmd --runtime-to-permanent
 
 echo "   Status atual do Firewalld:"
 sudo firewall-cmd --list-all

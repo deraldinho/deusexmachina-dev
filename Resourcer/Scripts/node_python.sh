@@ -32,8 +32,7 @@ if command_exists node && node -v | grep -q "v${NODE_MAJOR_VERSION}\."; then
     fi
 else
     echo "   Configurando o repositório NodeSource para Node.js v${NODE_MAJOR_VERSION}.x..."
-    sudo dnf install -y dnf-utils
-    sudo dnf config-manager --add-repo https://rpm.nodesource.com/pub_22.x/nodistro/repo/nodesource-release-el${NODE_MAJOR_VERSION}.noarch.rpm
+    curl -fsSL https://rpm.nodesource.com/setup_${NODE_MAJOR_VERSION}.x | sudo bash -
 
     echo "   Instalando Node.js..."
     sudo dnf install -y nodejs
@@ -44,7 +43,7 @@ else
 
     # Opcional: Atualizar npm para a versão mais recente
     # echo "   Atualizando npm para a versão mais recente..."
-    sudo npm install 
+    # sudo npm install 
     # echo "   npm atualizado para: $(npm -v)"
 fi
 

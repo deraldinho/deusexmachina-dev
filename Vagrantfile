@@ -21,8 +21,8 @@ env_file = Pathname.new(File.dirname(__FILE__)).join('.env')
 load_env(env_file) if env_file.file?
 
 # --- Configurações e Variáveis Globais ---
-VM_BOX_DEFAULT = "hashicorp/centos-stream-10"  # CentOS Stream 10
-VM_BOX_VERSION_DEFAULT = "latest" # Usar a versão mais recente disponível
+VM_BOX_DEFAULT = "bento/centos-stream-10"  # CentOS Stream 10
+VM_BOX_VERSION_DEFAULT = "202502.21.0" # Usar uma versão específica
 VM_HOSTNAME_DEFAULT = "DeusExMachina-VM"
 VM_IP_PRIVATE_DEFAULT = "192.168.56.10" # Mudado do seu original para evitar conflitos comuns com 192.168.33.x
 VM_MEMORY_DEFAULT = 4096 # Memória em MB (4GB)
@@ -114,7 +114,7 @@ Vagrant.configure("2") do |config|
 
     # Habilitar aceleração 3D e aumentar VRAM para melhor desempenho gráfico
     vb.customize ["modifyvm", :id, "--vram", "128"]
-    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+    #    vb.customize ["modifyvm", :id, "--accelerate3d", "on"] # Desabilitado: pode causar problemas em alguns hosts
 
     # Otimizações de rede (opcional, pode ajudar em alguns casos)
     # vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
@@ -132,9 +132,9 @@ Vagrant.configure("2") do |config|
 
   # Manter VirtualBox Guest Additions atualizados
   if Vagrant.has_plugin?("vagrant-vbguest")
-    config.vbguest.auto_update = true
-    # config.vbguest.no_remote = true # Se você não quiser que ele baixe novas ISOs
-    puts "#{USE_EMOJIS ? '🛠️' : '[INFO]'} vagrant-vbguest configurado para auto-update."
+    config.vbguest.auto_update = false # Desabilitado para controlar manualmente
+    # config.vbguest.no_remote = true 
+    puts "#{USE_EMOJIS ? '🛠️' : '[INFO]'} vagrant-vbguest auto-update desabilitado. A reconstrução será manual."
   end
 
   # 3. Configuração de Rede
@@ -162,10 +162,11 @@ Vagrant.configure("2") do |config|
 
   # 5. Provisionamento da VM
   puts "#{USE_EMOJIS ? '⚙️' : '[INFO]'} Iniciando provisionamento da VM..."
-  # Garante que os scripts tenham permissão de execução
-  config.vm.provision "shell",
-    name: "Set Execute Permissions",
-    inline: "chmod +x #{PROVISION_SCRIPTS_DIR_GUEST}/Resourcer/Scripts/*.sh", # CORRIGIDO para usar o caminho da VM
+  # Adiciona um passo para limpar o cache DNF e remover repositórios problemáticos
+  config.vm.provision "dnf-clean",
+    type: "shell",
+    inline: "echo 'Limpando repositórios antigos e cache do DNF...' && sudo rm -f /etc/yum.repos.d/nodesource* && sudo rm -f /etc/yum.repos.d/rpm.nodesource.com* && sudo dnf clean all",
+    privileged: true,
     run: "once"
 
   # Lista ordenada dos scripts de provisionamento
@@ -190,6 +191,13 @@ Vagrant.configure("2") do |config|
       run: "once"
     puts "  #{USE_EMOJIS ? '📜' : '[PROVISION]'} Agendado: #{script_info[:name]} (#{script_info[:path]})"
   end
+  
+  # Adiciona um passo para reconstruir os Guest Additions APÓS a atualização do kernel
+  config.vm.provision "vbguest-rebuild",
+    type: "shell",
+    inline: "echo 'Rebuilding VirtualBox Guest Additions...' && sudo /sbin/rcvboxadd setup",
+    privileged: true,
+    run: "once" # Executa apenas uma vez
   
   # Adiciona o health check
   provision_scripts_ordered << { name: "Health Check", path: "health_check.sh" }

@@ -38,10 +38,10 @@ echo "   Hora atual do sistema (após possível ajuste de timezone): $(date)"
 echo "➡️  Configurando Locale..."
 
 # Verificar se o pacote de locales está instalado
-if ! rpm -q glibc-langpack-pt_BR &> /dev/null; then
-    echo "   Pacote de locale 'glibc-langpack-pt_BR' não encontrado. Instalando..."
-    sudo dnf install -y glibc-langpack-pt_BR
-    echo "   Pacote de locale 'glibc-langpack-pt_BR' instalado."
+if ! rpm -q glibc-langpack-pt &> /dev/null; then
+    echo "   Pacote de locale 'glibc-langpack-pt' não encontrado. Instalando..."
+    sudo dnf install -y glibc-langpack-pt
+    echo "   Pacote de locale 'glibc-langpack-pt' instalado."
 fi
 
 # Definir o locale padrão do sistema usando localectl
@@ -53,10 +53,11 @@ if [ "${CURRENT_LANG}" != "${TARGET_LANG}" ]; then
 fi
 
 if [ "${NEEDS_UPDATE}" = true ]; then
-    echo "   Definindo locale padrão do sistema para LANG=${TARGET_LANG}, LC_ALL=${TARGET_LOCALE_UTF8}, LANGUAGE=${TARGET_LANGUAGE}..."
-    sudo localectl set-locale "LANG=${TARGET_LANG}" "LC_ALL=${TARGET_LOCALE_UTF8}"
-    # localectl não tem uma opção direta para LANGUAGE, mas LANG e LC_ALL são os mais importantes
-    echo "✅ Locale padrão do sistema atualizado via localectl."
+    echo "   Definindo locale padrão do sistema para LANG=${TARGET_LANG}..."
+    sudo localectl set-locale "LANG=${TARGET_LANG}"
+    echo "   Adicionando LANGUAGE=${TARGET_LANGUAGE} ao /etc/locale.conf..."
+    echo "LANGUAGE=${TARGET_LANGUAGE}" | sudo tee -a /etc/locale.conf
+    echo "✅ Locale padrão do sistema atualizado."
 else
     echo "✅ Locale padrão do sistema já está configurado corretamente."
 fi

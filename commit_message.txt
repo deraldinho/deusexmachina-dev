@@ -1,0 +1,25 @@
+feat: Migração para CentOS Stream 10 e melhorias no ambiente Vagrant
+
+Este commit realiza a migração do ambiente de desenvolvimento Vagrant do Ubuntu para o CentOS Stream 10 e implementa diversas melhorias:
+
+- **Migração para CentOS Stream 10:**
+  - `Vagrantfile`: Atualizado para utilizar a box `hashicorp/centos-stream-10`.
+  - **Scripts de Provisionamento (`Resourcer/Scripts/`):** Todos os scripts foram adaptados para utilizar `dnf` (gerenciador de pacotes do CentOS) e comandos/configurações específicas do CentOS, substituindo as equivalências do Ubuntu (`apt-get`, `ufw`, etc.). Os scripts afetados incluem:
+    - `essentials.sh`
+    - `docker_watchdog.sh`
+    - `firewall_security.sh` (agora usando `firewalld`)
+    - `monitoring_tools.sh`
+    - `node_python.sh`
+    - `setup_samba_dev_share.sh`
+    - `time_locale.sh`
+
+- **Adição de Health Checks:**
+  - `Resourcer/Scripts/health_check.sh`: Novo script criado para verificar a saúde dos serviços essenciais (Docker, Samba) dentro da VM após o provisionamento.
+  - `Vagrantfile`: Incluído o `health_check.sh` como um provisionador final para garantir a execução das verificações.
+
+- **Atualização da Documentação:**
+  - `README.md`: Atualizado para refletir a remoção da seção de instalação de plugins, a nova forma de configurar a senha do Samba via `.env`, e a estrutura de projeto revisada.
+  - `ARQUITETURA.md`: Atualizado para mencionar a configuração da senha do Samba via `.env` no workspace de desenvolvimento.
+
+- **Revisão da Alocação de Recursos da VM:**
+  - Orientação fornecida sobre como ajustar `VM_MEMORY` e `VM_CPUS` no `.env` para otimizar o desempenho da VM.
