@@ -1,5 +1,10 @@
 # DeuxExMachina 🤖 Automated Intelligence Project
 
+> **⚠️ Projeto Descontinuado e Arquivado**
+>
+> Este projeto não está mais em desenvolvimento ativo e foi arquivado em 1 de agosto de 2025. O código e a documentação são mantidos aqui para fins de referência e consulta. Sinta-se à vontade para clonar, aprender com o código ou usá-lo como base para seus próprios projetos, de acordo com a [Licença MIT](./LICENSE).
+
+
 ## 📜 Descrição
 
 **DeuxExMachina** é um projeto ambicioso para criar uma inteligência artificial modular e escalável, com o objetivo de automatizar demandas pessoais e, potencialmente, residenciais. A arquitetura é baseada em uma máquina virtual (VM) gerenciada por Vagrant, onde os diversos "cores" de IA e serviços de suporte rodarão como contêineres Docker, comunicando-se através de um pipeline de processamento e um broker MQTT.
@@ -126,7 +131,7 @@ Este é um projeto pessoal, mas ideias e sugestões são bem-vindas! Sinta-se à
 
 ## 📄 Licença
 
-(Defina uma licença se desejar, ex: MIT, Apache 2.0. Se não, pode remover esta seção ou indicar "Todos os direitos reservados.")
+Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](./LICENSE) para mais detalhes.
 
 ---
 
