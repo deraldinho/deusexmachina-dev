@@ -48,7 +48,8 @@ O desenvolvimento e interação com este ambiente serão facilitados por um comp
 
 3.  **Configurar Variáveis de Ambiente (Opcional):**
     * Copie o arquivo `.env.example` (se existir) para `.env`.
-    * Edite o arquivo `.env` para personalizar configurações como memória da VM, CPUs, IPs, e a senha do Samba (`SAMBA_PASSWORD`). O `Vagrantfile` usará valores padrão se o `.env` não existir ou uma variável específica não estiver definida.
+    * Edite o arquivo `.env` para personalizar configurações como memória da VM, CPUs, IPs, e a senha do Samba (`SAMBA_PASSWORD`).
+    * **Domínio de Desenvolvimento:** Você pode definir um domínio local personalizado (ex: `meuprojeto.dev`) através da variável `VM_DEV_DOMAIN` no arquivo `.env`. Se não for definida, o padrão `deusex.io` será usado. Isso é útil para acessar seus projetos na VM diretamente do navegador.
 
 
     
@@ -93,13 +94,15 @@ O desenvolvimento e interação com este ambiente serão facilitados por um comp
 * `Resourcer/Scripts/`: Contém os scripts shell (`.sh`) para provisionar a VM.
     * `essentials.sh`: Ferramentas básicas do sistema.
     * `time_locale.sh`: Configuração de fuso horário e localização.
+    * `setup_dnsmasq.sh`: Configura um servidor DNS local para o desenvolvimento.
     * `node_python.sh`: Instalação de Node.js e Python.
-    * `docker_watchdog.sh`: Instalação do Docker Engine, Docker Compose plugin e serviço watchdog.
+    * `docker_watchdog.sh`: Instalação do Docker Engine, Docker Compose e serviço watchdog.
     * `monitoring_tools.sh`: Instalação de htop, Glances e Netdata.
-    * `firewall_security.sh`: Configuração do UFW e Fail2Ban.
+    * `firewall_security.sh`: Configuração do Firewalld.
     * `setup_samba_dev_share.sh`: Configura o compartilhamento Samba interno à VM.
+    * `health_check.sh`: Verifica a saúde dos serviços essenciais da VM.
 * `start_dev.sh` / `start_dev.ps1`: Scripts para facilitar a inicialização do ambiente Vagrant.
-* `/vagrant/Projetos/` (Dentro da VM, acessível via Samba):
+* `/home/vagrant/projetos/` (Dentro da VM, acessível via Samba):
     * `docker-compose.yml`: Definirá os serviços Docker (cores de IA, MQTT, bancos de dados, etc.).
     * `ia_core_1/`, `ia_core_2/`, etc.: Diretórios para cada "core" de IA, contendo seus `Dockerfile` e código-fonte.
     * Outros diretórios de configuração e dados para os serviços Docker.

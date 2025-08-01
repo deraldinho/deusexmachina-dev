@@ -22,6 +22,8 @@ sudo dnf makecache -q
 echo "⬆️  Realizando upgrade de pacotes do sistema (pode levar alguns minutos)..."
 sudo dnf upgrade -y -q
 
+
+
 # 3. Lista de pacotes essenciais a serem instalados
 # Usar um array torna a lista mais fácil de ler e gerenciar.
 declare -a ESSENTIAL_PACKAGES=(
@@ -36,12 +38,15 @@ declare -a ESSENTIAL_PACKAGES=(
     dkms                        # Dynamic Kernel Module Support (IMPORTANTE para VirtualBox Guest Additions)
     jq                          # Ferramenta de linha de comando para processar JSON
     kernel-devel                # Desenvolvimento do kernel (necessário para VBox Guest Additions)
+    openssh-server              # Necessário para VS Code Remote
 )
 
 sudo dnf install -y -q epel-release
 
+sudo dnf clean all -y && sudo dnf makecache -q
+
 echo "🛠️  Instalando pacotes essenciais: ${ESSENTIAL_PACKAGES[*]}..."
-sudo dnf install -y -q "${ESSENTIAL_PACKAGES[@]}"
+sudo dnf install -y -q "${ESSENTIAL_PACKAGES[@]}""
 
 # 4. Limpeza do DNF
 # Remove pacotes que foram instalados automaticamente para satisfazer dependências

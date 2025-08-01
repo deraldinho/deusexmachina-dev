@@ -6,14 +6,14 @@ O DeuxExMachina visa ser uma plataforma de inteligência artificial modular e "A
 
 ## 2. Ambiente de Infraestrutura
 
-* **Máquina Virtual (VM):** Gerenciada por Vagrant, provisionada com Ubuntu 22.04 LTS.
-    * Configurada com scripts shell para instalar todas as dependências necessárias: Docker, Docker Compose, Python, Node.js, ferramentas de monitoramento (Netdata, htop, Glances), ferramentas de segurança (UFW, Fail2Ban), e outras essenciais.
+* **Máquina Virtual (VM):** Gerenciada por Vagrant, provisionada com **CentOS Stream 10**.
+    * Configurada com scripts shell para instalar todas as dependências necessárias: Docker, Docker Compose, Python, Node.js, ferramentas de monitoramento (Netdata, htop, Glances), ferramentas de segurança (Firewalld), e outras essenciais.
     * Configuração de timezone e locale para o Brasil.
 * **Workspace de Desenvolvimento:**
-    * Uma pasta `/home/vagrant/Projetos` (ou similar, conforme definido no script Samba) existe *exclusivamente dentro da VM*.
-    * Esta pasta **não é sincronizada** com o computador host via Vagrant `synced_folder`.
-    * O acesso a este workspace a partir do computador host é feito via **Samba**, com a senha do usuário `vagrant` podendo ser configurada via a variável `SAMBA_PASSWORD` no arquivo `.env` do host.
-* **Containerização:** Todos os componentes da IA (os "brains"), bancos de dados e serviços de mensageria (MQTT) rodarão como contêineres Docker, orquestrados por um arquivo `docker-compose.yml` localizado no workspace de desenvolvimento.
+    * O diretório `/home/vagrant` na VM é compartilhado via Samba. Dentro dele, a subpasta `/home/vagrant/projetos` é o local designado para os projetos.
+    * Este diretório **não é sincronizado** com o computador host via `synced_folder` do Vagrant, garantindo um ambiente de desenvolvimento contido na VM.
+    * O acesso a este workspace a partir do computador host é feito via **Samba**. A senha para o usuário `vagrant` pode ser pré-configurada através da variável `SAMBA_PASSWORD` no arquivo `.env` do host.
+* **Containerização:** Todos os componentes da IA (os "brains"), bancos de dados e serviços de mensageria (MQTT) rodarão como contêineres Docker, orquestrados por um arquivo `docker-compose.yml` localizado no workspace de desenvolvimento (`/home/vagrant/projetos`).
 
 ## 3. Arquitetura dos "Brains" de IA
 

@@ -19,6 +19,14 @@ if ($vmStatus -match "state,running") {
     $action = "up"
 }
 
+# Chama o script para instalar plugins do Vagrant
+Write-Host "Verificando e instalando plugins do Vagrant..."
+& "C:/Users/deral/deusexmachina-dev/Resourcer/Scripts/install_vagrant_plugins.ps1"
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "❌ Erro: Falha na instalação dos plugins do Vagrant. Abortando."
+    exit 1
+}
+
 # O Vagrantfile agora gerencia a instalação de plugins.
 Write-Host "✅ Verificando e instalando plugins do Vagrant (se necessário) via Vagrantfile..."
 Write-Host "Executando: vagrant $action $provision"

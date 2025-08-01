@@ -31,6 +31,10 @@ echo "   Habilitando e iniciando o serviço Firewalld..."
 sudo systemctl enable firewalld
 sudo systemctl start firewalld
 
+echo "   Habilitando e iniciando o serviço SSH..."
+sudo systemctl enable sshd.service
+sudo systemctl start sshd.service
+
 # Definir zona padrão (public é comum)
 echo "   Definindo zona padrão para 'public'."
 sudo firewall-cmd --set-default-zone=public

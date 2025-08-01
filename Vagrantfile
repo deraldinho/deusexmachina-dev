@@ -37,6 +37,7 @@ VM_IP_PRIVATE = ENV.fetch('VM_IP_PRIVATE', VM_IP_PRIVATE_DEFAULT)
 VM_MEMORY = ENV.fetch('VM_MEMORY', VM_MEMORY_DEFAULT).to_i
 VM_CPUS = ENV.fetch('VM_CPUS', VM_CPUS_DEFAULT).to_i
 VM_DISKSIZE = ENV.fetch('VM_DISKSIZE', VM_DISKSIZE_DEFAULT)
+VM_DEV_DOMAIN = ENV.fetch('VM_DEV_DOMAIN', 'deusex.io')
 
 USE_EMOJIS = ENV.fetch('USE_EMOJIS', 'true').downcase == 'true' # Mantido o seu 'true' como padrão
 
@@ -132,9 +133,9 @@ Vagrant.configure("2") do |config|
 
   # Manter VirtualBox Guest Additions atualizados
   if Vagrant.has_plugin?("vagrant-vbguest")
-    config.vbguest.auto_update = false # Desabilitado para controlar manualmente
+    config.vbguest.auto_update = true # Habilitado para garantir compatibilidade com o kernel
     # config.vbguest.no_remote = true 
-    puts "#{USE_EMOJIS ? '🛠️' : '[INFO]'} vagrant-vbguest auto-update desabilitado. A reconstrução será manual."
+    puts "#{USE_EMOJIS ? '🛠️' : '[INFO]'} vagrant-vbguest auto-update está configurado para: #{config.vbguest.auto_update}"
   end
 
   # 3. Configuração de Rede
@@ -173,6 +174,7 @@ Vagrant.configure("2") do |config|
   provision_scripts_ordered = [
     { name: "Essentials",         path: "essentials.sh" },
     { name: "Time & Locale",      path: "time_locale.sh" },
+    { name: "DNS Server",         path: "setup_dnsmasq.sh", args: "DEV_DOMAIN=#{VM_DEV_DOMAIN}" },
     { name: "Node.js & Python",   path: "node_python.sh" },
     { name: "Docker & Watchdog",  path: "docker_watchdog.sh" },
     { name: "Monitoring Tools",   path: "monitoring_tools.sh" },
@@ -191,13 +193,11 @@ Vagrant.configure("2") do |config|
       run: "once"
     puts "  #{USE_EMOJIS ? '📜' : '[PROVISION]'} Agendado: #{script_info[:name]} (#{script_info[:path]})"
   end
+
+  # Adiciona um provisionador de reboot para garantir que o kernel atualizado seja carregado
+  config.vm.provision "reboot", type: "shell", inline: "echo 'Reiniciando VM para aplicar atualizações de kernel...' && sudo reboot", run: "once"
   
-  # Adiciona um passo para reconstruir os Guest Additions APÓS a atualização do kernel
-  config.vm.provision "vbguest-rebuild",
-    type: "shell",
-    inline: "echo 'Rebuilding VirtualBox Guest Additions...' && sudo /sbin/rcvboxadd setup",
-    privileged: true,
-    run: "once" # Executa apenas uma vez
+  
   
   # Adiciona o health check
   provision_scripts_ordered << { name: "Health Check", path: "health_check.sh" }
