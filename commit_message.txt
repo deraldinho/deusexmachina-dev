@@ -1,25 +1,20 @@
-feat: Migração para CentOS Stream 10 e melhorias no ambiente Vagrant
+feat: Migração para CentOS e Refatoração do Ambiente
 
-Este commit realiza a migração do ambiente de desenvolvimento Vagrant do Ubuntu para o CentOS Stream 10 e implementa diversas melhorias:
+Esta atualização robustece e moderniza o ambiente de desenvolvimento, migrando a máquina virtual de Ubuntu para CentOS Stream 10 e introduzindo melhorias significativas no provisionamento e na configuração de rede.
 
-- **Migração para CentOS Stream 10:**
-  - `Vagrantfile`: Atualizado para utilizar a box `hashicorp/centos-stream-10`.
-  - **Scripts de Provisionamento (`Resourcer/Scripts/`):** Todos os scripts foram adaptados para utilizar `dnf` (gerenciador de pacotes do CentOS) e comandos/configurações específicas do CentOS, substituindo as equivalências do Ubuntu (`apt-get`, `ufw`, etc.). Os scripts afetados incluem:
-    - `essentials.sh`
-    - `docker_watchdog.sh`
-    - `firewall_security.sh` (agora usando `firewalld`)
-    - `monitoring_tools.sh`
-    - `node_python.sh`
-    - `setup_samba_dev_share.sh`
-    - `time_locale.sh`
+Principais Mudanças:
 
-- **Adição de Health Checks:**
-  - `Resourcer/Scripts/health_check.sh`: Novo script criado para verificar a saúde dos serviços essenciais (Docker, Samba) dentro da VM após o provisionamento.
-  - `Vagrantfile`: Incluído o `health_check.sh` como um provisionador final para garantir a execução das verificações.
+- **Migração da VM para CentOS Stream 10:** A box da VM foi atualizada para `bento/centos-stream-10`, proporcionando um ambiente mais alinhado com sistemas de produção modernos. Todos os scripts de provisionamento foram refatorados para usar `dnf` e garantir compatibilidade.
 
-- **Atualização da Documentação:**
-  - `README.md`: Atualizado para refletir a remoção da seção de instalação de plugins, a nova forma de configurar a senha do Samba via `.env`, e a estrutura de projeto revisada.
-  - `ARQUITETURA.md`: Atualizado para mencionar a configuração da senha do Samba via `.env` no workspace de desenvolvimento.
+- **Servidor DNS Local com Dnsmasq:** Adicionado um novo script `setup_dnsmasq.sh` que configura o Dnsmasq na VM. Isso permite a resolução de um domínio de desenvolvimento local (padrão: `deusex.io`), facilitando o acesso a serviços via nome em vez de IP.
 
-- **Revisão da Alocação de Recursos da VM:**
-  - Orientação fornecida sobre como ajustar `VM_MEMORY` e `VM_CPUS` no `.env` para otimizar o desempenho da VM.
+- **Refatoração dos Scripts de Provisionamento:**
+    - Os scripts foram ajustados para o ecossistema CentOS.
+    - O `firewall_security.sh` agora configura o `firewalld` em vez do `ufw`.
+    - O `essentials.sh` foi atualizado com pacotes relevantes para o CentOS.
+
+- **Atualização da Documentação:** Os arquivos `README.md` e `ARQUITETURA.md` foram atualizados para refletir todas as mudanças, incluindo o novo SO, o servidor DNS e os caminhos de compartilhamento Samba corrigidos.
+
+- **Melhoria no Processo de Boot:** O `Vagrantfile` agora executa a instalação de plugins do Vagrant e reinicia a VM após atualizações de kernel para garantir a aplicação correta das mudanças.
+
+Este commit representa um marco importante, finalizando a configuração do ambiente de desenvolvimento e preparando o projeto para a próxima fase de desenvolvimento dos "cérebros" de IA.
