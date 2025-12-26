@@ -21,7 +21,8 @@ if ($vmStatus -match "state,running") {
 
 # Chama o script para instalar plugins do Vagrant
 Write-Host "Verificando e instalando plugins do Vagrant..."
-& "C:/Users/deral/deusexmachina-dev/Resourcer/Scripts/install_vagrant_plugins.ps1"
+$scriptPath = Join-Path $PSScriptRoot "Resourcer/Scripts/install_vagrant_plugins.ps1"
+& $scriptPath
 if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ Erro: Falha na instalação dos plugins do Vagrant. Abortando."
     exit 1

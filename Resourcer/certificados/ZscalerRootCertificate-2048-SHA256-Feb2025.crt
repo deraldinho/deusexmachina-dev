@@ -1,0 +1,91 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            db:be:98:2d:89:b7:7b:93
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=US, ST=California, L=San Jose, O=Zscaler Inc., OU=Zscaler Inc., CN=Zscaler Root CA/emailAddress=support@zscaler.com
+        Validity
+            Not Before: Feb  2 16:38:20 2025 GMT
+            Not After : Jun 20 16:38:20 2052 GMT
+        Subject: C=US, ST=California, L=San Jose, O=Zscaler Inc., OU=Zscaler Inc., CN=Zscaler Root CA/emailAddress=support@zscaler.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:a9:3e:d2:4d:2c:59:45:38:04:14:57:fa:76:81:
+                    da:8d:27:35:be:4e:63:9b:39:8c:e8:15:ae:3a:8d:
+                    38:e0:4b:1a:4d:cf:5e:54:45:7f:1e:31:ff:d4:35:
+                    b3:66:d7:2b:7d:38:fe:9e:2d:b4:e5:aa:4c:4e:52:
+                    81:5b:75:18:47:e9:72:2c:74:3d:16:86:62:0d:76:
+                    17:2b:ca:68:29:25:79:f9:39:b4:56:5b:3f:e4:a6:
+                    fc:9a:48:55:56:ab:fb:2e:06:04:9a:f1:18:ec:73:
+                    d8:fa:2d:67:10:66:42:6b:8e:99:5c:23:a8:84:9d:
+                    26:04:4b:41:f4:95:65:a4:32:0e:fa:73:74:85:43:
+                    00:61:87:59:d4:a6:56:08:c3:5f:e4:9f:da:4d:98:
+                    92:86:ca:2b:37:60:37:f2:24:8e:85:d7:7e:99:c4:
+                    4c:e2:23:4b:de:0b:0b:bb:df:57:84:a9:d1:a8:aa:
+                    07:78:7f:37:95:57:5f:bb:55:c1:7a:84:33:cf:95:
+                    7a:80:0d:e4:6d:1b:e1:0f:0a:08:95:30:5e:31:ae:
+                    65:e3:24:5d:24:07:dd:a6:46:c5:ce:a8:b0:4a:03:
+                    5d:85:bc:53:1e:76:18:a2:b0:f3:29:fa:f6:ac:41:
+                    4c:76:c3:14:d0:31:dd:78:06:5f:ef:5d:7e:d4:2b:
+                    a7:b9
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                B9:B7:DD:4A:CD:C3:0E:0C:86:9D:5D:DF:EC:1C:04:69:C5:4E:98:DF
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Authority Key Identifier: 
+                keyid:B9:B7:DD:4A:CD:C3:0E:0C:86:9D:5D:DF:EC:1C:04:69:C5:4E:98:DF
+                DirName:/C=US/ST=California/L=San Jose/O=Zscaler Inc./OU=Zscaler Inc./CN=Zscaler Root CA/emailAddress=support@zscaler.com
+                serial:DB:BE:98:2D:89:B7:7B:93
+
+            X509v3 Key Usage: critical
+                Digital Signature, Certificate Sign, CRL Sign
+    Signature Algorithm: sha256WithRSAEncryption
+         59:db:9e:ee:eb:17:03:9d:fa:b7:dc:38:5d:8b:48:7f:83:ee:
+         64:cf:9c:2d:a3:ed:30:d5:4f:f2:d9:5d:db:01:fc:0e:ce:f4:
+         a2:29:fa:ce:18:4b:2c:60:d5:5d:bf:5e:ea:48:e5:02:8c:5b:
+         3f:92:f0:a6:66:74:b6:64:0a:ff:88:0c:5e:0f:ca:a4:0b:a6:
+         5b:e7:9e:76:2d:10:a2:57:85:c7:05:a7:8d:e8:27:7e:61:32:
+         4c:81:52:a6:07:11:6b:b3:19:44:3e:66:ae:c4:ed:5a:23:04:
+         df:dd:e4:26:0f:e9:f9:62:7e:cc:90:a0:a5:21:e7:64:7e:bc:
+         07:ab:8b:37:66:fc:af:ca:99:40:c2:34:b0:c9:eb:26:13:3f:
+         f9:19:d9:3d:5d:d8:6c:7e:b2:25:5a:af:03:c8:98:a3:34:6c:
+         ac:04:e7:1e:60:e0:7a:8e:60:a2:8e:dc:05:1b:4d:ae:6c:07:
+         e2:20:c6:7f:05:10:bc:f8:ee:f0:8f:30:e0:44:02:f3:38:2d:
+         be:99:0c:ad:4a:42:a8:f0:ae:8c:b2:47:c4:76:34:06:65:cb:
+         4a:68:f2:12:1b:7e:38:3d:06:3f:cb:8c:ca:05:fd:49:36:94:
+         9f:b1:30:73:68:8f:65:8f:b3:ca:9b:ba:b6:4f:33:29:f2:ce:
+         43:b8:66:ca
+-----BEGIN CERTIFICATE-----
+MIIE6DCCA9CgAwIBAgIJANu+mC2Jt3uTMA0GCSqGSIb3DQEBCwUAMIGhMQswCQYD
+VQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTERMA8GA1UEBxMIU2FuIEpvc2Ux
+FTATBgNVBAoTDFpzY2FsZXIgSW5jLjEVMBMGA1UECxMMWnNjYWxlciBJbmMuMRgw
+FgYDVQQDEw9ac2NhbGVyIFJvb3QgQ0ExIjAgBgkqhkiG9w0BCQEWE3N1cHBvcnRA
+enNjYWxlci5jb20wIBcNMjUwMjAyMTYzODIwWhgPMjA1MjA2MjAxNjM4MjBaMIGh
+MQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTERMA8GA1UEBxMIU2Fu
+IEpvc2UxFTATBgNVBAoTDFpzY2FsZXIgSW5jLjEVMBMGA1UECxMMWnNjYWxlciBJ
+bmMuMRgwFgYDVQQDEw9ac2NhbGVyIFJvb3QgQ0ExIjAgBgkqhkiG9w0BCQEWE3N1
+cHBvcnRAenNjYWxlci5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIB
+AQCpPtJNLFlFOAQUV/p2gdqNJzW+TmObOYzoFa46jTjgSxpNz15URX8eMf/UNbNm
+1yt9OP6eLbTlqkxOUoFbdRhH6XIsdD0WhmINdhcrymgpJXn5ObRWWz/kpvyaSFVW
+q/suBgSa8Rjsc9j6LWcQZkJrjplcI6iEnSYES0H0lWWkMg76c3SFQwBhh1nUplYI
+w1/kn9pNmJKGyis3YDfyJI6F136ZxEziI0veCwu731eEqdGoqgd4fzeVV1+7VcF6
+hDPPlXqADeRtG+EPCgiVMF4xrmXjJF0kB92mRsXOqLBKA12FvFMedhiisPMp+vas
+QUx2wxTQMd14Bl/vXX7UK6e5AgMBAAGjggEdMIIBGTAdBgNVHQ4EFgQUubfdSs3D
+DgyGnV3f7BwEacVOmN8wDwYDVR0TAQH/BAUwAwEB/zCB1gYDVR0jBIHOMIHLgBS5
+t91KzcMODIadXd/sHARpxU6Y36GBp6SBpDCBoTELMAkGA1UEBhMCVVMxEzARBgNV
+BAgTCkNhbGlmb3JuaWExETAPBgNVBAcTCFNhbiBKb3NlMRUwEwYDVQQKEwxac2Nh
+bGVyIEluYy4xFTATBgNVBAsTDFpzY2FsZXIgSW5jLjEYMBYGA1UEAxMPWnNjYWxl
+ciBSb290IENBMSIwIAYJKoZIhvcNAQkBFhNzdXBwb3J0QHpzY2FsZXIuY29tggkA
+276YLYm3e5MwDgYDVR0PAQH/BAQDAgGGMA0GCSqGSIb3DQEBCwUAA4IBAQBZ257u
+6xcDnfq33Dhdi0h/g+5kz5wto+0w1U/y2V3bAfwOzvSiKfrOGEssYNVdv17qSOUC
+jFs/kvCmZnS2ZAr/iAxeD8qkC6Zb5552LRCiV4XHBaeN6Cd+YTJMgVKmBxFrsxlE
+PmauxO1aIwTf3eQmD+n5Yn7MkKClIedkfrwHq4s3ZvyvyplAwjSwyesmEz/5Gdk9
+XdhsfrIlWq8DyJijNGysBOceYOB6jmCijtwFG02ubAfiIMZ/BRC8+O7wjzDgRALz
+OC2+mQytSkKo8K6MskfEdjQGZctKaPISG344PQY/y4zKBf1JNpSfsTBzaI9lj7PK
+m7q2TzMp8s5DuGbK
+-----END CERTIFICATE-----
